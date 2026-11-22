@@ -1,0 +1,48 @@
+{
+  "validation": {
+    "titleRequired": "Title is required",
+    "titleTooLong": "Title must be 100 characters or fewer",
+    "destinationRequired": "Destination is required",
+    "destinationTooLong": "Destination must be 100 characters or fewer",
+    "dateInvalid": "Enter a valid date",
+    "endBeforeStart": "End date can't be before the start date"
+  },
+  "card": {
+    "dayOf": "Day {{day}} of {{total}}",
+    "today": "Today",
+    "moreMembers": "+{{count}}",
+    "members": "Members",
+    "role": { "OWNER": "Owner", "EDITOR": "Editor", "VIEWER": "Viewer" }
+  },
+  "form": {
+    "createTitle": "New trip",
+    "editTitle": "Edit trip",
+    "createDescription": "Plan your next adventure.",
+    "editDescription": "Update your trip details.",
+    "title": "Title",
+    "titlePlaceholder": "Summer in Italy",
+    "destination": "Destination",
+    "destinationPlaceholder": "Rome, Italy",
+    "startDate": "Start date",
+    "endDate": "End date (optional)",
+    "cover": "Cover",
+    "coverColor": "Cover color",
+    "uploadImage": "Upload image",
+    "changeImage": "Change image",
+    "removeImage": "Remove image",
+    "imageTypeError": "Only JPG, PNG or WebP images are allowed",
+    "imageSizeError": "Image must be 5 MB or smaller",
+    "cancel": "Cancel",
+    "create": "Create trip",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "close": "Close",
+    "createFailed": "Couldn't create the trip. Please try again.",
+    "updateFailed": "Couldn't save the trip. Please try again.",
+    "coverFailed": "The trip was saved, but the image couldn't be uploaded.",
+    "colors": {
+      "sky": "Sky", "teal": "Teal", "emerald": "Emerald", "amber": "Amber",
+      "orange": "Orange", "rose": "Rose", "violet": "Violet", "slate": "Slate"
+    }
+  }
+}
