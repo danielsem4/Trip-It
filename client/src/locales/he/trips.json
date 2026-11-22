@@ -31,7 +31,7 @@
     "changeImage": "החלפת תמונה",
     "removeImage": "הסרת תמונה",
     "imageTypeError": "ניתן להעלות רק תמונות JPG, PNG או WebP",
-    "imageSizeError": "גודל התמונה חייב להיות עד 5MB",
+    "imageSizeError": "גודל התמונה חייב להיות עד 4MB",
     "cancel": "ביטול",
     "create": "יצירת טיול",
     "save": "שמירת שינויים",

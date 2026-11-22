@@ -1,3 +1,4 @@
+import { waitUntil } from '@vercel/functions';
 import type { Geocoder, IGeocodeStore } from '../map/map.types';
 import type { SafeFetch } from './safeFetch';
 import type { IPhotoFiles } from './photo.store';
@@ -38,7 +39,8 @@ export class PhotoFinder {
     if (this.queue.has(job.placeId)) return true;
     if (this.queue.size >= MAX_QUEUE) return false;
     this.queue.set(job.placeId, job);
-    if (!this.running) void this.run();
+    // On Vercel this keeps the function alive until the queue has drained.
+    if (!this.running) waitUntil(this.run());
     return true;
   }
 

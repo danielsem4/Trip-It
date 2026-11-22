@@ -1,8 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { TripsService } from './trips.service';
-import fs from 'fs';
 import { AppError } from '../../shared/errors/AppError';
-import { deleteCoverFile } from './trips.upload';
+import { deleteCoverFile, saveCoverFile } from './trips.upload';
 import { placePhotos } from '../photos/placePhotos';
 import type { CreateTripDto, UpdateTripDto } from './trips.schema';
 import type { GuestRole } from './trips.types';
@@ -93,17 +92,14 @@ export function createTripsController(service: TripsService) {
     async setCover(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         if (!req.file) throw new AppError('Cover image is required', 400);
-        const filePath = req.file.path;
+        const tripId = res.locals['id'] as number;
+        const url = await saveCoverFile(tripId, req.file);
         try {
-          const { trip, previousUrl } = await service.setCoverImage(
-            req.currentUser!.userId,
-            res.locals['id'] as number,
-            `/api/uploads/covers/${req.file.filename}`,
-          );
+          const { trip, previousUrl } = await service.setCoverImage(req.currentUser!.userId, tripId, url);
           await deleteCoverFile(previousUrl).catch(() => undefined);
           res.json({ trip });
         } catch (err) {
-          await fs.promises.unlink(filePath).catch(() => undefined);
+          await deleteCoverFile(url).catch(() => undefined);
           throw err;
         }
       } catch (err) {

@@ -1,3 +1,4 @@
+import { waitUntil } from '@vercel/functions';
 import type { Bbox, GeoHit, GeoTags, Geocoder, IGeocodeStore } from './map.types';
 
 // Nominatim's usage policy: at most one request a second, an identifying User-Agent, cached results.
@@ -69,7 +70,8 @@ export class NominatimGeocoder implements Geocoder {
     if (this.queue.has(query)) return true;
     if (this.queue.size >= MAX_QUEUE) return false;
     this.queue.set(query, near);
-    if (!this.running) void this.run();
+    // On Vercel this keeps the function alive until the queue has drained.
+    if (!this.running) waitUntil(this.run());
     return true;
   }
 

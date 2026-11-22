@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { COVER_COLORS, coverClass, type CoverColor } from '../lib/coverColors'
 
-const COVER_MAX_BYTES = 5 * 1024 * 1024
+const COVER_MAX_BYTES = 4 * 1024 * 1024
 const COVER_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 interface CoverPickerProps {

@@ -1,13 +1,7 @@
-import fs from 'fs';
-import path from 'path';
 import crypto from 'crypto';
 import sharp from 'sharp';
-import { UPLOADS_ROOT } from '../trips/trips.upload';
+import { fileStore } from '../../shared/storage/fileStore';
 
-const PLACES_DIR = path.join(UPLOADS_ROOT, 'places');
-fs.mkdirSync(PLACES_DIR, { recursive: true });
-
-const PHOTO_URL_PREFIX = '/api/uploads/places/';
 const WIDTH = 480;
 // Smaller than this is a logo, an icon or a tracking pixel, not a photo.
 const MIN_SIDE = 100;
@@ -33,17 +27,10 @@ export class PhotoFiles implements IPhotoFiles {
     } catch {
       return null;
     }
-    const name = `${placeId}-${crypto.randomUUID()}.webp`;
-    await fs.promises.writeFile(path.join(PLACES_DIR, name), thumbnail);
-    return PHOTO_URL_PREFIX + name;
+    return fileStore.save('places', `${placeId}-${crypto.randomUUID()}.webp`, thumbnail, 'image/webp');
   }
 
-  async delete(url: string | null): Promise<void> {
-    if (!url || !url.startsWith(PHOTO_URL_PREFIX)) return;
-    try {
-      await fs.promises.unlink(path.join(PLACES_DIR, path.basename(url)));
-    } catch (err) {
-      if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
-    }
+  delete(url: string | null): Promise<void> {
+    return fileStore.delete(url);
   }
 }
