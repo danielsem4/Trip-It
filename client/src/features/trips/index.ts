@@ -23,6 +23,7 @@ export {
   useRemoveTripCover,
 } from './hooks/useTrips'
 export { useTripCountdown } from './hooks/useTripCountdown'
+export { useToday } from './hooks/useToday'
 export { TripDetailsPage } from './pages/TripDetailsPage'
 export { TripCard } from './components/TripCard'
 export { TripCover } from './components/TripCover'

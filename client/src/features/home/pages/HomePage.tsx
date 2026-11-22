@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
 import { useAuth } from '@/features/auth'
-import { TripFormDialog, pickHeroTrip, todayISO, useTripsQuery } from '@/features/trips'
+import { TripFormDialog, pickHeroTrip, useToday, useTripsQuery } from '@/features/trips'
 import { Button } from '@/components/ui/button'
 import { HeroTrip } from '../components/HeroTrip'
 import { TripTabs, type TripTab } from '../components/TripTabs'
@@ -27,7 +27,7 @@ export function HomePage() {
   const query = useTripsQuery()
   const [params, setParams] = useSearchParams()
   const [createOpen, setCreateOpen] = useState(false)
-  const [today] = useState(() => todayISO())
+  const today = useToday()
   const tab: TripTab = params.get('tab') === 'shared' ? 'shared' : 'mine'
 
   function changeTab(next: TripTab) {

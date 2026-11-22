@@ -19,15 +19,18 @@ import {
 import { NotFoundPage } from '@/components/shared/NotFoundPage'
 import { useDeleteTrip, useTripQuery } from '../hooks/useTrips'
 import { useTripCountdown } from '../hooks/useTripCountdown'
-import { formatTripDates, todayISO } from '../lib/tripDates'
+import { useToday } from '../hooks/useToday'
+import { formatTripDates } from '../lib/tripDates'
 import { TripCover } from '../components/TripCover'
 import { TripFormDialog } from '../components/TripFormDialog'
 import type { Trip } from '../types/trip.types'
 
+const MAX_TRIP_ID = 2_147_483_647 // Postgres INT4
+
 function parseTripId(raw: string | undefined): number | null {
   if (!raw || !/^[1-9]\d*$/.test(raw)) return null
   const id = Number(raw)
-  return Number.isSafeInteger(id) ? id : null
+  return Number.isSafeInteger(id) && id <= MAX_TRIP_ID ? id : null
 }
 
 export function TripDetailsPage() {
@@ -67,7 +70,8 @@ function TripDetails({ trip }: Readonly<{ trip: Trip }>) {
   const deleteTrip = useDeleteTrip()
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const countdown = useTripCountdown(trip, todayISO())
+  const today = useToday()
+  const countdown = useTripCountdown(trip, today)
   const canEdit = trip.myRole === 'OWNER' || trip.myRole === 'EDITOR'
   const canDelete = trip.myRole === 'OWNER'
 
@@ -100,10 +104,10 @@ function TripDetails({ trip }: Readonly<{ trip: Trip }>) {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-col gap-2">
-          <h1 className="text-2xl font-bold break-words">{trip.title}</h1>
+          <h1 className="text-2xl font-bold break-words"><bdi>{trip.title}</bdi></h1>
           <p className="text-muted-foreground flex items-center gap-1.5">
             <MapPin className="size-4 shrink-0" aria-hidden />
-            <span className="break-words">{trip.destination}</span>
+            <span className="break-words"><bdi>{trip.destination}</bdi></span>
           </p>
           <p className="text-muted-foreground flex items-center gap-1.5">
             <CalendarDays className="size-4 shrink-0" aria-hidden />
@@ -136,7 +140,7 @@ function TripDetails({ trip }: Readonly<{ trip: Trip }>) {
         <ul className="flex flex-col gap-2">
           {trip.members.map((m) => (
             <li key={m.userId} className="flex items-center justify-between gap-2 text-sm">
-              <span className="min-w-0 truncate">{m.name?.trim() || m.email}</span>
+              <span className="min-w-0 truncate"><bdi>{m.name?.trim() || m.email}</bdi></span>
               <span className="bg-secondary text-secondary-foreground shrink-0 rounded-full px-2 py-0.5 text-xs font-medium">
                 {t(`card.role.${m.role}`)}
               </span>
