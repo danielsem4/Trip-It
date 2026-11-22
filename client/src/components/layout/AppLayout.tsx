@@ -5,7 +5,7 @@ import { Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { AppSidebar, MobileSidebar } from './AppSidebar'
-import { navItems } from './navItems'
+import { useNavGroups } from './useNavGroups'
 
 // Matches Tailwind's `md` breakpoint: the drawer is only used below it.
 const tabletUp = window.matchMedia('(min-width: 48rem)')
@@ -16,7 +16,13 @@ export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
 
-  const current = navItems.find((item) => pathname.startsWith(item.url))
+  const groups = useNavGroups()
+
+  // The most specific item covering the current path names the page.
+  const current = groups
+    .flatMap((group) => group.items)
+    .filter(({ url, end }) => pathname === url || (!end && pathname.startsWith(`${url}/`)))
+    .sort((a, b) => b.url.length - a.url.length)[0]
 
   // Close the drawer when the viewport grows past the phone layout (links close it on tap).
   useEffect(() => {
@@ -29,8 +35,8 @@ export function AppLayout() {
 
   return (
     <div className="min-h-dvh">
-      <AppSidebar collapsed={collapsed} />
-      <MobileSidebar open={mobileOpen} onOpenChange={setMobileOpen} />
+      <AppSidebar groups={groups} collapsed={collapsed} />
+      <MobileSidebar groups={groups} open={mobileOpen} onOpenChange={setMobileOpen} />
       <div
         className={cn(
           'flex min-h-dvh flex-col transition-[margin] duration-300 md:ms-16',
@@ -60,7 +66,7 @@ export function AppLayout() {
           </Button>
           {current && (
             <h1 className="truncate text-base font-semibold sm:text-lg md:ps-2 lg:ps-0">
-              {t(current.titleKey)}
+              {current.titleKey ? t(current.titleKey) : <bdi>{current.title}</bdi>}
             </h1>
           )}
         </header>

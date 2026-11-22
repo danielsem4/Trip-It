@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { LogOut, Plane } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { cn } from '@/lib/utils'
-import { navItems } from './navItems'
+import type { NavGroup } from './navItems'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,11 +33,12 @@ const itemLayoutClass: Record<Compact, string> = {
 }
 
 interface SidebarContentProps {
+  groups: NavGroup[]
   compact: Compact
   onNavigate?: () => void
 }
 
-function SidebarContent({ compact, onNavigate }: SidebarContentProps) {
+function SidebarContent({ groups, compact, onNavigate }: SidebarContentProps) {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { user, clearAuth } = useAuth()
@@ -66,24 +67,47 @@ function SidebarContent({ compact, onNavigate }: SidebarContentProps) {
         )}
       </div>
 
-      <nav className="flex flex-col gap-1">
-        {navItems.map(({ titleKey, url, icon: Icon }) => (
-          <NavLink
-            key={url}
-            to={url}
-            onClick={onNavigate}
-            title={compact === 'never' ? undefined : t(titleKey)}
-            className={({ isActive }) =>
-              cn(
-                'flex min-h-11 items-center gap-3 rounded-md px-2.5 transition',
-                itemLayoutClass[compact],
-                isActive ? 'bg-primary/15 font-semibold text-primary' : 'hover:bg-primary/10',
-              )
-            }
+      <nav className="flex flex-col gap-3">
+        {groups.map((group, i) => (
+          <div
+            key={i}
+            className={cn('flex flex-col gap-1', i > 0 && 'border-t border-border pt-3')}
           >
-            <Icon className="h-5 w-5 shrink-0" />
-            <span className={labelClass[compact]}>{t(titleKey)}</span>
-          </NavLink>
+            {group.heading && (
+              <p
+                className={cn(
+                  'truncate px-2.5 pb-1 text-xs font-semibold text-muted-foreground',
+                  labelClass[compact],
+                )}
+              >
+                <bdi>{group.heading}</bdi>
+              </p>
+            )}
+            {group.items.map(({ titleKey, title, url, icon: Icon, end }) => {
+              const label = titleKey ? t(titleKey) : title
+              return (
+                <NavLink
+                  key={url}
+                  to={url}
+                  end={end}
+                  onClick={onNavigate}
+                  title={compact === 'never' ? undefined : label}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex min-h-11 items-center gap-3 rounded-md px-2.5 transition',
+                      itemLayoutClass[compact],
+                      isActive ? 'bg-primary/15 font-semibold text-primary' : 'hover:bg-primary/10',
+                    )
+                  }
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <span className={cn('truncate', labelClass[compact])}>
+                    {titleKey ? label : <bdi>{label}</bdi>}
+                  </span>
+                </NavLink>
+              )
+            })}
+          </div>
         ))}
       </nav>
 
@@ -121,11 +145,12 @@ function SidebarContent({ compact, onNavigate }: SidebarContentProps) {
 }
 
 interface AppSidebarProps {
+  groups: NavGroup[]
   collapsed: boolean
 }
 
 // Persistent sidebar for tablet (icon rail) and desktop (full, or rail when collapsed).
-export function AppSidebar({ collapsed }: AppSidebarProps) {
+export function AppSidebar({ groups, collapsed }: AppSidebarProps) {
   return (
     <aside
       className={cn(
@@ -133,18 +158,19 @@ export function AppSidebar({ collapsed }: AppSidebarProps) {
         !collapsed && 'lg:w-64',
       )}
     >
-      <SidebarContent compact={collapsed ? 'always' : 'belowLg'} />
+      <SidebarContent groups={groups} compact={collapsed ? 'always' : 'belowLg'} />
     </aside>
   )
 }
 
 interface MobileSidebarProps {
+  groups: NavGroup[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 // Slide-over drawer used below md.
-export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
+export function MobileSidebar({ groups, open, onOpenChange }: MobileSidebarProps) {
   const { t } = useTranslation('common')
 
   return (
@@ -152,7 +178,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
       <SheetContent className="md:hidden">
         <SheetTitle className="sr-only">{t('appName')}</SheetTitle>
         <SheetDescription className="sr-only">{t('nav.menu')}</SheetDescription>
-        <SidebarContent compact="never" onNavigate={() => onOpenChange(false)} />
+        <SidebarContent groups={groups} compact="never" onNavigate={() => onOpenChange(false)} />
       </SheetContent>
     </Sheet>
   )

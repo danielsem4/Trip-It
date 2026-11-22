@@ -8,7 +8,16 @@
     "openMenu": "Open menu",
     "menu": "Main navigation",
     "collapseSidebar": "Collapse sidebar",
-    "expandSidebar": "Expand sidebar"
+    "expandSidebar": "Expand sidebar",
+    "trip": {
+      "overview": "Overview",
+      "flights": "Flights",
+      "stays": "Stays",
+      "budget": "Budget",
+      "attractions": "Attractions",
+      "restaurants": "Restaurants",
+      "transport": "Transport"
+    }
   },
   "logoutDialog": {
     "title": "Log out?",

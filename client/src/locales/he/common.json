@@ -8,7 +8,16 @@
     "openMenu": "פתיחת תפריט",
     "menu": "ניווט ראשי",
     "collapseSidebar": "כיווץ תפריט",
-    "expandSidebar": "הרחבת תפריט"
+    "expandSidebar": "הרחבת תפריט",
+    "trip": {
+      "overview": "סקירה",
+      "flights": "טיסות",
+      "stays": "לינה",
+      "budget": "תקציב",
+      "attractions": "אטרקציות",
+      "restaurants": "מסעדות",
+      "transport": "תחבורה"
+    }
   },
   "logoutDialog": {
     "title": "להתנתק?",

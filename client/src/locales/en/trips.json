@@ -45,7 +45,6 @@
     }
   },
   "details": {
-      "back": "Back to trips",
       "loading": "Loading trip",
       "loadFailed": "Couldn't load this trip.",
       "retry": "Retry",
@@ -54,7 +53,12 @@
       "deleted": "Trip deleted",
       "deleteFailed": "Couldn't delete the trip. Please try again.",
       "deleteTitle": "Delete this trip?",
-      "deleteDescription": "\"{{title}}\" will be permanently deleted for everyone on it. This can't be undone.",
-      "comingSoon": "Trip details coming soon"
+      "deleteDescription": "\"{{title}}\" will be permanently deleted for everyone on it. This can't be undone."
+  },
+  "home": {
+    "sections": "Trip sections"
+  },
+  "section": {
+    "empty": "Nothing here yet."
   }
 }
