@@ -16,6 +16,12 @@ enum Role {
   USER
 }
 
+enum TripRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
 // ─── User ────────────────────────────────────────────────
 
 model User {
@@ -26,6 +32,37 @@ model User {
   role         Role    @default(USER)
   isActive     Boolean @default(true)
 
+  tripMemberships TripMember[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ─── Trip ────────────────────────────────────────────────
+
+model Trip {
+  id            Int       @id @default(autoincrement())
+  title         String
+  destination   String
+  startDate     DateTime  @db.Date
+  endDate       DateTime? @db.Date
+  coverColor    String    @default("sky")
+  coverImageUrl String?
+  members       TripMember[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model TripMember {
+  id       Int      @id @default(autoincrement())
+  tripId   Int
+  userId   Int
+  role     TripRole
+  pinned   Boolean  @default(false)
+  joinedAt DateTime @default(now())
+  trip     Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, userId])
+  @@index([userId])
 }
