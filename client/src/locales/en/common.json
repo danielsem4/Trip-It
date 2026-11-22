@@ -16,7 +16,8 @@
       "budget": "Budget",
       "attractions": "Attractions",
       "restaurants": "Restaurants",
-      "transport": "Transport"
+      "transport": "Transport",
+      "addSection": "Add section"
     }
   },
   "logoutDialog": {

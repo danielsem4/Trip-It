@@ -16,7 +16,8 @@
       "budget": "תקציב",
       "attractions": "אטרקציות",
       "restaurants": "מסעדות",
-      "transport": "תחבורה"
+      "transport": "תחבורה",
+      "addSection": "הוספת חלק"
     }
   },
   "logoutDialog": {

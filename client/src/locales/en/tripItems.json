@@ -1,0 +1,227 @@
+{
+  "common": {
+    "price": "Price",
+    "currency": "Currency",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "delete": "Delete",
+    "retry": "Retry",
+    "loading": "Loading",
+    "loadFailed": "Couldn't load this. Please try again.",
+    "saveFailed": "Couldn't save. Please try again.",
+    "deleteFailed": "Couldn't delete. Please try again.",
+    "deleteTitle": "Delete this item?",
+    "deleteDescription": "\"{{title}}\" will be permanently deleted. This can't be undone.",
+    "editItem": "Edit {{title}}",
+    "deleteItem": "Delete {{title}}",
+    "confirmation": "Confirmation: {{value}}",
+    "map": "Map",
+    "website": "Website"
+  },
+  "validation": {
+    "required": "This field is required",
+    "tooLong": "This is too long",
+    "date": "Enter a valid date",
+    "time": "Enter a valid time",
+    "url": "Enter a valid link",
+    "amount": "Enter a valid amount",
+    "beforeStart": "This can't be before the start date"
+  },
+  "flights": {
+    "title": "Flights",
+    "add": "Add flight",
+    "edit": "Edit flight",
+    "empty": "No flights yet. Add your flights to keep the times and booking details in one place.",
+    "departs": "Departs {{when}}",
+    "arrives": "Arrives {{when}}",
+    "terminal": "Terminal {{value}}",
+    "seat": "Seat {{value}}",
+    "fields": {
+      "flightNumber": "Flight number",
+      "airline": "Airline",
+      "fromAirport": "From",
+      "toAirport": "To",
+      "departDate": "Departure date",
+      "departTime": "Departure time",
+      "arriveDate": "Arrival date",
+      "arriveTime": "Arrival time",
+      "terminal": "Terminal",
+      "seat": "Seat",
+      "confirmation": "Booking reference",
+      "notes": "Notes"
+    }
+  },
+  "stays": {
+    "title": "Stays",
+    "add": "Add stay",
+    "edit": "Edit stay",
+    "empty": "No stays yet. Add your hotel or apartment with its dates and address.",
+    "checkIn": "Check-in {{when}}",
+    "checkOut": "Check-out {{when}}",
+    "nights_one": "{{count}} night",
+    "nights_other": "{{count}} nights",
+    "fields": {
+      "name": "Name",
+      "type": "Type",
+      "checkInDate": "Check-in date",
+      "checkInTime": "Check-in time",
+      "checkOutDate": "Check-out date",
+      "checkOutTime": "Check-out time",
+      "address": "Address",
+      "mapUrl": "Map link",
+      "website": "Website",
+      "phone": "Phone",
+      "confirmation": "Booking reference",
+      "notes": "Notes"
+    },
+    "options": {
+      "type": {
+        "HOTEL": "Hotel",
+        "APARTMENT": "Apartment",
+        "OTHER": "Other"
+      }
+    }
+  },
+  "transport": {
+    "title": "Transport",
+    "add": "Add transport",
+    "edit": "Edit transport",
+    "empty": "No transport yet. Add trains, buses, car rentals and transfers.",
+    "until": "Until {{when}}",
+    "fields": {
+      "title": "Title",
+      "type": "Type",
+      "fromPlace": "From",
+      "toPlace": "To",
+      "date": "Date",
+      "time": "Time",
+      "endDate": "End date",
+      "endTime": "End time",
+      "provider": "Company",
+      "confirmation": "Booking reference",
+      "notes": "Notes"
+    },
+    "options": {
+      "type": {
+        "TRAIN": "Train",
+        "BUS": "Bus",
+        "CAR_RENTAL": "Car rental",
+        "TAXI": "Taxi",
+        "FERRY": "Ferry",
+        "TRANSFER": "Transfer",
+        "OTHER": "Other"
+      }
+    }
+  },
+  "attractions": {
+    "title": "Attractions",
+    "add": "Add attraction",
+    "edit": "Edit attraction",
+    "empty": "No attractions yet. Add the places you want to see."
+  },
+  "restaurants": {
+    "title": "Restaurants",
+    "add": "Add restaurant",
+    "edit": "Edit restaurant",
+    "empty": "No restaurants yet. Add the places you want to eat at."
+  },
+  "places": {
+    "title": "Places",
+    "add": "Add place",
+    "edit": "Edit place",
+    "empty": "Nothing here yet. Add the first place.",
+    "markDone": "Mark {{name}} as visited",
+    "markNotDone": "Mark {{name}} as not visited",
+    "done": "Visited",
+    "fields": {
+      "name": "Name",
+      "date": "Date",
+      "time": "Time",
+      "address": "Address",
+      "mapUrl": "Map link",
+      "website": "Website",
+      "notes": "Notes"
+    }
+  },
+  "expenses": {
+    "title": "Extra expenses",
+    "add": "Add expense",
+    "edit": "Edit expense",
+    "empty": "Add costs that don't belong to a section, like insurance or shopping.",
+    "fields": {
+      "title": "What for",
+      "date": "Date",
+      "notes": "Notes"
+    }
+  },
+  "sections": {
+    "name": "Section name",
+    "namePlaceholder": "Coffee shops",
+    "icon": "Icon",
+    "create": "Add section",
+    "addTitle": "Add a section",
+    "addDescription": "A list of places just for this trip, like coffee shops, bars or shops.",
+    "edit": "Edit section",
+    "delete": "Delete section",
+    "deleteTitle": "Delete this section?",
+    "deleteDescription_one": "\"{{name}}\" and its {{count}} place will be permanently deleted.",
+    "deleteDescription_other": "\"{{name}}\" and its {{count}} places will be permanently deleted.",
+    "icons": {
+      "pin": "Pin",
+      "star": "Star",
+      "heart": "Heart",
+      "coffee": "Coffee",
+      "beer": "Beer",
+      "wine": "Wine",
+      "cake": "Cake",
+      "shopping": "Shopping",
+      "store": "Store",
+      "music": "Music",
+      "camera": "Camera",
+      "museum": "Museum",
+      "tree": "Park",
+      "beach": "Beach",
+      "mountain": "Mountain",
+      "ticket": "Ticket",
+      "gamepad": "Games",
+      "dumbbell": "Sports",
+      "book": "Books",
+      "baby": "Kids"
+    }
+  },
+  "budget": {
+    "title": "Budget",
+    "planned": "Planned so far",
+    "set": "Set budget",
+    "change": "Change",
+    "noBudget": "No budget set yet. Set one to see how much is left.",
+    "remaining": "{{amount}} left",
+    "over": "{{amount}} over budget",
+    "settingsTitle": "Trip budget",
+    "settingsDescription": "Set the total budget and the main currency everything is summed in.",
+    "amount": "Total budget",
+    "mainCurrency": "Main currency",
+    "currencyChangeNote": "Changing the main currency removes the exchange rates you saved.",
+    "ratesTitle": "Exchange rates",
+    "missingRates": "Some prices aren't counted yet. Add a rate for each currency.",
+    "waiting": "{{amount}} not counted yet",
+    "rateLabel": "How many {{main}} is 1 {{currency}}",
+    "removeRate": "Remove the {{currency}} rate",
+    "bySection": "By section"
+  },
+  "overview": {
+    "nextUp": "Next up",
+    "nothingYet": "Nothing yet",
+    "visited": "{{done}} of {{count}} visited",
+    "sections": "Trip sections",
+    "missingRates": "Some prices need an exchange rate",
+    "event": {
+      "flight": "Flight",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "transport": "Transport",
+      "place": "Plan"
+    }
+  }
+}

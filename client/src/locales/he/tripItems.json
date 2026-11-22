@@ -1,0 +1,229 @@
+{
+  "common": {
+    "price": "מחיר",
+    "currency": "מטבע",
+    "cancel": "ביטול",
+    "save": "שמירה",
+    "saving": "שומר...",
+    "delete": "מחיקה",
+    "retry": "נסו שוב",
+    "loading": "טוען",
+    "loadFailed": "לא ניתן היה לטעון. נסו שוב.",
+    "saveFailed": "לא ניתן היה לשמור. נסו שוב.",
+    "deleteFailed": "לא ניתן היה למחוק. נסו שוב.",
+    "deleteTitle": "למחוק את הפריט?",
+    "deleteDescription": "\"{{title}}\" יימחק לצמיתות. לא ניתן לבטל פעולה זו.",
+    "editItem": "עריכת {{title}}",
+    "deleteItem": "מחיקת {{title}}",
+    "confirmation": "מספר אישור: {{value}}",
+    "map": "מפה",
+    "website": "אתר"
+  },
+  "validation": {
+    "required": "שדה חובה",
+    "tooLong": "הטקסט ארוך מדי",
+    "date": "יש להזין תאריך תקין",
+    "time": "יש להזין שעה תקינה",
+    "url": "יש להזין קישור תקין",
+    "amount": "יש להזין סכום תקין",
+    "beforeStart": "לא יכול להיות לפני תאריך ההתחלה"
+  },
+  "flights": {
+    "title": "טיסות",
+    "add": "הוספת טיסה",
+    "edit": "עריכת טיסה",
+    "empty": "אין עדיין טיסות. הוסיפו את הטיסות כדי לשמור את השעות ופרטי ההזמנה במקום אחד.",
+    "departs": "המראה {{when}}",
+    "arrives": "נחיתה {{when}}",
+    "terminal": "טרמינל {{value}}",
+    "seat": "מושב {{value}}",
+    "fields": {
+      "flightNumber": "מספר טיסה",
+      "airline": "חברת תעופה",
+      "fromAirport": "מוצא",
+      "toAirport": "יעד",
+      "departDate": "תאריך המראה",
+      "departTime": "שעת המראה",
+      "arriveDate": "תאריך נחיתה",
+      "arriveTime": "שעת נחיתה",
+      "terminal": "טרמינל",
+      "seat": "מושב",
+      "confirmation": "מספר הזמנה",
+      "notes": "הערות"
+    }
+  },
+  "stays": {
+    "title": "לינה",
+    "add": "הוספת לינה",
+    "edit": "עריכת לינה",
+    "empty": "אין עדיין לינה. הוסיפו את המלון או הדירה עם התאריכים והכתובת.",
+    "checkIn": "צ'ק-אין {{when}}",
+    "checkOut": "צ'ק-אאוט {{when}}",
+    "nights_one": "לילה אחד",
+    "nights_two": "שני לילות",
+    "nights_other": "{{count}} לילות",
+    "fields": {
+      "name": "שם",
+      "type": "סוג",
+      "checkInDate": "תאריך צ'ק-אין",
+      "checkInTime": "שעת צ'ק-אין",
+      "checkOutDate": "תאריך צ'ק-אאוט",
+      "checkOutTime": "שעת צ'ק-אאוט",
+      "address": "כתובת",
+      "mapUrl": "קישור למפה",
+      "website": "אתר",
+      "phone": "טלפון",
+      "confirmation": "מספר הזמנה",
+      "notes": "הערות"
+    },
+    "options": {
+      "type": {
+        "HOTEL": "מלון",
+        "APARTMENT": "דירה",
+        "OTHER": "אחר"
+      }
+    }
+  },
+  "transport": {
+    "title": "תחבורה",
+    "add": "הוספת תחבורה",
+    "edit": "עריכת תחבורה",
+    "empty": "אין עדיין תחבורה. הוסיפו רכבות, אוטובוסים, השכרת רכב והסעות.",
+    "until": "עד {{when}}",
+    "fields": {
+      "title": "כותרת",
+      "type": "סוג",
+      "fromPlace": "מוצא",
+      "toPlace": "יעד",
+      "date": "תאריך",
+      "time": "שעה",
+      "endDate": "תאריך סיום",
+      "endTime": "שעת סיום",
+      "provider": "חברה",
+      "confirmation": "מספר הזמנה",
+      "notes": "הערות"
+    },
+    "options": {
+      "type": {
+        "TRAIN": "רכבת",
+        "BUS": "אוטובוס",
+        "CAR_RENTAL": "השכרת רכב",
+        "TAXI": "מונית",
+        "FERRY": "מעבורת",
+        "TRANSFER": "הסעה",
+        "OTHER": "אחר"
+      }
+    }
+  },
+  "attractions": {
+    "title": "אטרקציות",
+    "add": "הוספת אטרקציה",
+    "edit": "עריכת אטרקציה",
+    "empty": "אין עדיין אטרקציות. הוסיפו את המקומות שתרצו לראות."
+  },
+  "restaurants": {
+    "title": "מסעדות",
+    "add": "הוספת מסעדה",
+    "edit": "עריכת מסעדה",
+    "empty": "אין עדיין מסעדות. הוסיפו את המקומות שתרצו לאכול בהם."
+  },
+  "places": {
+    "title": "מקומות",
+    "add": "הוספת מקום",
+    "edit": "עריכת מקום",
+    "empty": "אין כאן עדיין כלום. הוסיפו את המקום הראשון.",
+    "markDone": "סימון {{name}} כ\"ביקרנו\"",
+    "markNotDone": "ביטול הסימון של {{name}}",
+    "done": "ביקרנו",
+    "fields": {
+      "name": "שם",
+      "date": "תאריך",
+      "time": "שעה",
+      "address": "כתובת",
+      "mapUrl": "קישור למפה",
+      "website": "אתר",
+      "notes": "הערות"
+    }
+  },
+  "expenses": {
+    "title": "הוצאות נוספות",
+    "add": "הוספת הוצאה",
+    "edit": "עריכת הוצאה",
+    "empty": "הוסיפו הוצאות שלא שייכות לאף חלק, כמו ביטוח או קניות.",
+    "fields": {
+      "title": "עבור מה",
+      "date": "תאריך",
+      "notes": "הערות"
+    }
+  },
+  "sections": {
+    "name": "שם החלק",
+    "namePlaceholder": "בתי קפה",
+    "icon": "אייקון",
+    "create": "הוספת חלק",
+    "addTitle": "הוספת חלק לטיול",
+    "addDescription": "רשימת מקומות רק לטיול הזה, למשל בתי קפה, ברים או חנויות.",
+    "edit": "עריכת החלק",
+    "delete": "מחיקת החלק",
+    "deleteTitle": "למחוק את החלק?",
+    "deleteDescription_one": "\"{{name}}\" והמקום שבו יימחקו לצמיתות.",
+    "deleteDescription_two": "\"{{name}}\" ושני המקומות שבו יימחקו לצמיתות.",
+    "deleteDescription_other": "\"{{name}}\" ו-{{count}} המקומות שבו יימחקו לצמיתות.",
+    "icons": {
+      "pin": "סיכה",
+      "star": "כוכב",
+      "heart": "לב",
+      "coffee": "קפה",
+      "beer": "בירה",
+      "wine": "יין",
+      "cake": "עוגה",
+      "shopping": "קניות",
+      "store": "חנות",
+      "music": "מוזיקה",
+      "camera": "מצלמה",
+      "museum": "מוזיאון",
+      "tree": "פארק",
+      "beach": "חוף",
+      "mountain": "הר",
+      "ticket": "כרטיס",
+      "gamepad": "משחקים",
+      "dumbbell": "ספורט",
+      "book": "ספרים",
+      "baby": "ילדים"
+    }
+  },
+  "budget": {
+    "title": "תקציב",
+    "planned": "מתוכנן עד כה",
+    "set": "הגדרת תקציב",
+    "change": "שינוי",
+    "noBudget": "עדיין לא הוגדר תקציב. הגדירו תקציב כדי לראות כמה נשאר.",
+    "remaining": "נשארו {{amount}}",
+    "over": "חריגה של {{amount}} מהתקציב",
+    "settingsTitle": "תקציב הטיול",
+    "settingsDescription": "הגדירו את התקציב הכולל ואת המטבע הראשי שבו הכול מסוכם.",
+    "amount": "תקציב כולל",
+    "mainCurrency": "מטבע ראשי",
+    "currencyChangeNote": "שינוי המטבע הראשי ימחק את שערי ההמרה ששמרתם.",
+    "ratesTitle": "שערי המרה",
+    "missingRates": "חלק מהמחירים עדיין לא נספרים. הוסיפו שער לכל מטבע.",
+    "waiting": "{{amount}} עדיין לא נספרו",
+    "rateLabel": "כמה {{main}} שווה 1 {{currency}}",
+    "removeRate": "הסרת השער של {{currency}}",
+    "bySection": "לפי חלק"
+  },
+  "overview": {
+    "nextUp": "הדבר הבא",
+    "nothingYet": "עדיין ריק",
+    "visited": "ביקרנו ב-{{done}} מתוך {{count}}",
+    "sections": "חלקי הטיול",
+    "missingRates": "לחלק מהמחירים חסר שער המרה",
+    "event": {
+      "flight": "טיסה",
+      "checkIn": "צ'ק-אין",
+      "checkOut": "צ'ק-אאוט",
+      "transport": "תחבורה",
+      "place": "תוכנית"
+    }
+  }
+}

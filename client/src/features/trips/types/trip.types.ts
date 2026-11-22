@@ -17,6 +17,7 @@ export interface Trip {
   endDate: string | null // 'YYYY-MM-DD'
   coverColor: string
   coverImageUrl: string | null
+  currency: string // main currency, ISO 4217
   myRole: TripRole
   members: TripMember[] // owner first
 }

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { CalendarDays, MapPin, Pencil, Trash2 } from 'lucide-react'
@@ -15,17 +15,22 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { useDeleteTrip } from '../hooks/useTrips'
-import { canEditTrip, useTrip } from '../hooks/useTrip'
+import { canEditTrip } from '../hooks/useTrip'
 import { useTripCountdown } from '../hooks/useTripCountdown'
 import { useToday } from '../hooks/useToday'
 import { formatTripDates } from '../lib/tripDates'
-import { TripCover } from '../components/TripCover'
-import { TripFormDialog } from '../components/TripFormDialog'
-import { TRIP_SECTIONS, tripPath } from '../lib/tripSections'
+import { TripCover } from './TripCover'
+import { TripFormDialog } from './TripFormDialog'
+import type { Trip } from '../types/trip.types'
 
-export function TripHomePage() {
-  const trip = useTrip()
-  const { t: tNav } = useTranslation('common')
+interface TripOverviewShellProps {
+  trip: Trip
+  // The trip's content summary, shown between the header and the members list.
+  children: ReactNode
+}
+
+// The trip's own details (cover, dates, members, edit / delete) around its overview content.
+export function TripOverviewShell({ trip, children }: Readonly<TripOverviewShellProps>) {
   const { t, i18n } = useTranslation('trips')
   const locale = i18n.resolvedLanguage ?? i18n.language
   const navigate = useNavigate()
@@ -87,6 +92,8 @@ export function TripHomePage() {
         )}
       </div>
 
+      {children}
+
       <section className="glass rounded-xl p-4" aria-labelledby="trip-members">
         <h2 id="trip-members" className="mb-3 text-base font-semibold">
           {t('card.members')}
@@ -102,19 +109,6 @@ export function TripHomePage() {
           ))}
         </ul>
       </section>
-
-      <nav aria-label={t('home.sections')} className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {TRIP_SECTIONS.map(({ key, titleKey, icon: Icon }) => (
-          <Link
-            key={key}
-            to={tripPath(trip.id, key)}
-            className="glass hover:bg-primary/10 focus-visible:ring-ring/50 flex min-h-20 flex-col gap-2 rounded-xl p-4 outline-none transition focus-visible:ring-[3px]"
-          >
-            <Icon className="text-primary size-5" aria-hidden />
-            <span className="font-medium">{tNav(titleKey)}</span>
-          </Link>
-        ))}
-      </nav>
 
       {canEdit && <TripFormDialog open={editOpen} onOpenChange={setEditOpen} trip={trip} />}
 

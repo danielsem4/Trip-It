@@ -14,6 +14,7 @@ function makeTrip(id: number, startDate: string, endDate: string | null): Trip {
     id,
     title: `Trip ${id}`,
     destination: 'Somewhere',
+    currency: 'ILS',
     startDate,
     endDate,
     coverColor: 'sky',

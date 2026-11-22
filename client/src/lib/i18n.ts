@@ -7,24 +7,40 @@ import enAuth from '@/locales/en/auth.json'
 import enHome from '@/locales/en/home.json'
 import enSettings from '@/locales/en/settings.json'
 import enTrips from '@/locales/en/trips.json'
+import enTripItems from '@/locales/en/tripItems.json'
 import heCommon from '@/locales/he/common.json'
 import heAuth from '@/locales/he/auth.json'
 import heHome from '@/locales/he/home.json'
 import heSettings from '@/locales/he/settings.json'
 import heTrips from '@/locales/he/trips.json'
+import heTripItems from '@/locales/he/tripItems.json'
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      en: { common: enCommon, auth: enAuth, home: enHome, settings: enSettings, trips: enTrips },
-      he: { common: heCommon, auth: heAuth, home: heHome, settings: heSettings, trips: heTrips },
+      en: {
+        common: enCommon,
+        auth: enAuth,
+        home: enHome,
+        settings: enSettings,
+        trips: enTrips,
+        tripItems: enTripItems,
+      },
+      he: {
+        common: heCommon,
+        auth: heAuth,
+        home: heHome,
+        settings: heSettings,
+        trips: heTrips,
+        tripItems: heTripItems,
+      },
     },
     fallbackLng: 'he',
     supportedLngs: ['he', 'en'],
     defaultNS: 'common',
-    ns: ['common', 'auth', 'home', 'settings', 'trips'],
+    ns: ['common', 'auth', 'home', 'settings', 'trips', 'tripItems'],
     interpolation: {
       escapeValue: false,
     },

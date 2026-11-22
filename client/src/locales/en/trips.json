@@ -54,11 +54,5 @@
       "deleteFailed": "Couldn't delete the trip. Please try again.",
       "deleteTitle": "Delete this trip?",
       "deleteDescription": "\"{{title}}\" will be permanently deleted for everyone on it. This can't be undone."
-  },
-  "home": {
-    "sections": "Trip sections"
-  },
-  "section": {
-    "empty": "Nothing here yet."
   }
 }
