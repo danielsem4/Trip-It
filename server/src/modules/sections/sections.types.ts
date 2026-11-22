@@ -5,9 +5,11 @@ export type SectionKind = 'ATTRACTIONS' | 'RESTAURANTS' | 'CUSTOM';
 export type PlaceRecord = Omit<Place, 'createdAt' | 'updatedAt' | 'priceAmount'> & {
   priceAmount: number | null;
 };
-export type PlaceData = Omit<PlaceRecord, 'id' | 'sectionId'>;
+// The photo is found by the server, never sent by the client.
+export type PlacePhoto = Pick<PlaceRecord, 'photoUrl' | 'photoCheckedAt'>;
+export type PlaceData = Omit<PlaceRecord, 'id' | 'sectionId' | keyof PlacePhoto>;
 
-export type PlaceShape = Omit<PlaceRecord, 'sectionId' | 'date'> & {
+export type PlaceShape = Omit<PlaceRecord, 'sectionId' | 'date' | 'photoCheckedAt'> & {
   date: string | null; // 'YYYY-MM-DD'
 };
 
@@ -28,6 +30,12 @@ export interface SectionShape {
   places: PlaceShape[];
 }
 
+export interface SectionsList {
+  sections: SectionShape[];
+  // Photo lookups still running: the client asks again while this is above zero.
+  pendingPhotos: number;
+}
+
 export interface ISectionsRepository {
   // Built-in sections first, then custom ones in creation order; places by date, then time.
   list(tripId: number): Promise<SectionRecord[]>;
@@ -37,6 +45,6 @@ export interface ISectionsRepository {
   update(sectionId: number, data: { name: string; icon: string }): Promise<SectionRecord>;
   delete(sectionId: number): Promise<void>;
   createPlace(sectionId: number, data: PlaceData): Promise<PlaceRecord>;
-  updatePlace(placeId: number, data: Partial<PlaceData>): Promise<PlaceRecord>;
+  updatePlace(placeId: number, data: Partial<PlaceData & PlacePhoto>): Promise<PlaceRecord>;
   deletePlace(placeId: number): Promise<void>;
 }

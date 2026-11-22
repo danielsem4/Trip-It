@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticate } from '../../shared/middlewares/authenticate';
 import { validateRequest } from '../../shared/middlewares/validateRequest';
 import { parseIdParam } from '../../shared/middlewares/parseIdParam';
-import { createTripSchema, updateTripSchema } from './trips.schema';
+import { createTripSchema, memberRoleSchema, updateTripSchema } from './trips.schema';
 import { TripsRepository } from './trips.repository';
 import { TripsService } from './trips.service';
 import { handleCoverUpload } from './trips.upload';
@@ -14,6 +14,7 @@ import { createSectionsRouter } from '../sections/sections.routes';
 import { createExpensesRouter } from '../expenses/expenses.routes';
 import { createBudgetRouter } from '../budget/budget.routes';
 import { createMapRouter } from '../map/map.routes';
+import { createTripInviteRouter } from '../invites/invites.routes';
 
 const repository = new TripsRepository();
 const service = new TripsService(repository);
@@ -29,6 +30,17 @@ tripsRouter.patch('/:id', parseIdParam(), validateRequest(updateTripSchema), con
 tripsRouter.delete('/:id', parseIdParam(), controller.remove);
 tripsRouter.post('/:id/cover', parseIdParam(), handleCoverUpload, controller.setCover);
 tripsRouter.delete('/:id/cover', parseIdParam(), controller.removeCover);
+
+const memberId = parseIdParam('userId', 'Member not found');
+tripsRouter.patch(
+  '/:id/members/:userId',
+  parseIdParam(),
+  memberId,
+  validateRequest(memberRoleSchema),
+  controller.setMemberRole,
+);
+tripsRouter.delete('/:id/members/:userId', parseIdParam(), memberId, controller.removeMember);
+tripsRouter.use('/:id/invite', parseIdParam(), createTripInviteRouter(service));
 
 // What's inside a trip. Each router checks trip membership through the trips service.
 tripsRouter.use('/:id/flights', parseIdParam(), createFlightsRouter(service));

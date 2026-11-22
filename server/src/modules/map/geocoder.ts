@@ -1,16 +1,17 @@
-import type { Bbox, GeoHit, Geocoder, IGeocodeStore } from './map.types';
+import type { Bbox, GeoHit, GeoTags, Geocoder, IGeocodeStore } from './map.types';
 
 // Nominatim's usage policy: at most one request a second, an identifying User-Agent, cached results.
 const SPACING_MS = 1100;
 const COOLDOWN_MS = 60_000;
 const TIMEOUT_MS = 10_000;
 const MAX_QUEUE = 500;
-const USER_AGENT = 'trip-it/1.0 (trip planner)';
+export const USER_AGENT = 'trip-it/1.0 (trip planner)';
 
 interface NominatimResult {
   lat: string;
   lon: string;
   boundingbox?: string[];
+  extratags?: Record<string, unknown> | null;
 }
 
 export type FetchLike = (url: string, init: { headers: Record<string, string>; signal: AbortSignal }) => Promise<{
@@ -34,6 +35,13 @@ function toHit(result: NominatimResult | undefined): GeoHit | null {
   const box = (result.boundingbox ?? []).map(Number);
   const bbox = box.length === 4 && box.every(Number.isFinite) ? (box as Bbox) : null;
   return { lat, lng, bbox };
+}
+
+function toTags(result: NominatimResult | undefined): GeoTags {
+  const entries = Object.entries(result?.extratags ?? {}).filter(
+    (entry): entry is [string, string] => typeof entry[1] === 'string',
+  );
+  return Object.fromEntries(entries);
 }
 
 // One queue for the whole process, so the rate limit holds no matter how many trips are open.
@@ -71,7 +79,8 @@ export class NominatimGeocoder implements Geocoder {
       while (this.queue.size > 0) {
         const [query, near] = this.queue.entries().next().value!;
         try {
-          await this.store.save(query, await this.lookup(query, near));
+          const { hit, tags } = await this.lookup(query, near);
+          await this.store.save(query, hit, tags);
         } catch (err) {
           // The service is down or pushing back: stop asking for a while, and cache nothing.
           console.error('[geocoder] lookup failed, pausing:', err instanceof Error ? err.message : err);
@@ -89,8 +98,9 @@ export class NominatimGeocoder implements Geocoder {
     }
   }
 
-  private async lookup(query: string, near: Bbox | null): Promise<GeoHit | null> {
-    const params = new URLSearchParams({ q: query, format: 'jsonv2', limit: '1' });
+  private async lookup(query: string, near: Bbox | null): Promise<{ hit: GeoHit | null; tags: GeoTags }> {
+    // The tags are what place photos are found from.
+    const params = new URLSearchParams({ q: query, format: 'jsonv2', limit: '1', extratags: '1' });
     if (near) {
       const [south, north, west, east] = near;
       // A preference, not a filter: results outside the box are still returned.
@@ -102,6 +112,7 @@ export class NominatimGeocoder implements Geocoder {
     });
     if (!res.ok) throw new Error(`geocoder responded ${res.status}`);
     const results = (await res.json()) as NominatimResult[];
-    return toHit(Array.isArray(results) ? results[0] : undefined);
+    const hit = toHit(Array.isArray(results) ? results[0] : undefined);
+    return { hit, tags: hit ? toTags(results[0]) : {} };
   }
 }

@@ -1,7 +1,7 @@
 import type { Place, Prisma } from '@prisma/client';
 import prisma from '../../lib/prisma';
 import { num } from '../../shared/utils/price';
-import type { ISectionsRepository, PlaceData, PlaceRecord, SectionRecord } from './sections.types';
+import type { ISectionsRepository, PlaceData, PlacePhoto, PlaceRecord, SectionRecord } from './sections.types';
 
 const include = {
   places: {
@@ -62,7 +62,7 @@ export class SectionsRepository implements ISectionsRepository {
     return toPlace(await prisma.place.create({ data: { ...data, sectionId } }));
   }
 
-  async updatePlace(placeId: number, data: Partial<PlaceData>): Promise<PlaceRecord> {
+  async updatePlace(placeId: number, data: Partial<PlaceData & PlacePhoto>): Promise<PlaceRecord> {
     return toPlace(await prisma.place.update({ where: { id: placeId }, data }));
   }
 

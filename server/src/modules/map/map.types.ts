@@ -9,10 +9,15 @@ export interface GeoHit extends Coords {
   bbox: Bbox | null;
 }
 
+// OpenStreetMap tags of a hit, e.g. `wikidata`, `image`, `website`.
+export type GeoTags = Record<string, string>;
+
 // One geocoded lookup. A null hit means the text was looked up and nothing was found.
 export interface GeocodeRow {
   query: string;
   hit: GeoHit | null;
+  // Null on rows saved before tags were asked for.
+  tags: GeoTags | null;
   checkedAt: Date;
 }
 
@@ -50,7 +55,7 @@ export interface IMapRepository {
 
 export interface IGeocodeStore {
   find(queries: string[]): Promise<GeocodeRow[]>;
-  save(query: string, hit: GeoHit | null): Promise<void>;
+  save(query: string, hit: GeoHit | null, tags: GeoTags): Promise<void>;
 }
 
 export interface Geocoder {

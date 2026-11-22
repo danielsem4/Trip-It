@@ -1,4 +1,6 @@
 export type TripRole = 'OWNER' | 'EDITOR' | 'VIEWER';
+// What someone other than the owner can be.
+export type GuestRole = Exclude<TripRole, 'OWNER'>;
 
 export interface TripMemberShape {
   userId: number;
@@ -50,4 +52,8 @@ export interface ITripsRepository {
   createWithOwner(userId: number, data: TripWriteData): Promise<TripRecord>;
   update(tripId: number, data: Partial<TripWriteData>): Promise<TripRecord>;
   delete(tripId: number): Promise<void>;
+  setMemberRole(tripId: number, userId: number, role: GuestRole): Promise<void>;
+  removeMember(tripId: number, userId: number): Promise<void>;
+  // Files that go when the trip does.
+  listPlacePhotos(tripId: number): Promise<string[]>;
 }

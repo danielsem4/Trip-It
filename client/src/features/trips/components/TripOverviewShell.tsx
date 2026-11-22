@@ -21,6 +21,7 @@ import { useToday } from '../hooks/useToday'
 import { formatTripDates } from '../lib/tripDates'
 import { TripCover } from './TripCover'
 import { TripFormDialog } from './TripFormDialog'
+import { TripMembers } from './TripMembers'
 import type { Trip } from '../types/trip.types'
 
 interface TripOverviewShellProps {
@@ -94,21 +95,7 @@ export function TripOverviewShell({ trip, children }: Readonly<TripOverviewShell
 
       {children}
 
-      <section className="glass rounded-xl p-4" aria-labelledby="trip-members">
-        <h2 id="trip-members" className="mb-3 text-base font-semibold">
-          {t('card.members')}
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {trip.members.map((m) => (
-            <li key={m.userId} className="flex items-center justify-between gap-2 text-sm">
-              <span className="min-w-0 truncate"><bdi>{m.name?.trim() || m.email}</bdi></span>
-              <span className="bg-secondary text-secondary-foreground shrink-0 rounded-full px-2 py-0.5 text-xs font-medium">
-                {t(`card.role.${m.role}`)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <TripMembers trip={trip} />
 
       {canEdit && <TripFormDialog open={editOpen} onOpenChange={setEditOpen} trip={trip} />}
 

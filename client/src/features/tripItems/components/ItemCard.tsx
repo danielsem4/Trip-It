@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ExternalLink, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -17,12 +17,23 @@ interface ItemCardProps {
 
 export function ItemCard({ content, leading, muted, onEdit, onDelete }: Readonly<ItemCardProps>) {
   const { t, i18n } = useTranslation('tripItems')
-  const { title, badge, lines, links = [], notes, price } = content
+  const { title, image, badge, lines, links = [], notes, price } = content
+  // A photo that fails to load leaves no gap: the card falls back to text only.
+  const [brokenImage, setBrokenImage] = useState<string | null>(null)
   const priceText = price ? formatPrice(price, i18n.resolvedLanguage ?? i18n.language) : null
 
   return (
     <li className="glass flex gap-3 rounded-xl p-4">
       {leading}
+      {image && image !== brokenImage && (
+        <img
+          src={image}
+          alt=""
+          loading="lazy"
+          onError={() => setBrokenImage(image)}
+          className={cn('size-16 shrink-0 rounded-lg object-cover', muted && 'opacity-60')}
+        />
+      )}
       <div className={cn('flex min-w-0 flex-1 flex-col gap-2', muted && 'opacity-60')}>
         <div className="flex items-start justify-between gap-2">
           <h3 className="min-w-0 font-semibold break-words">

@@ -9,12 +9,17 @@ import {
   type SectionFormData,
 } from './sections.api'
 
+const POLL_MS = 2500
+
 // All of a trip's place sections with their places, in one query.
+// While place photos are still being looked up it asks again, and they appear as they're found.
 export function useSectionsQuery(tripId: number, enabled = true) {
   return useQuery({
     enabled,
     queryKey: tripItemKeys.collection(tripId, 'sections'),
     queryFn: ({ signal }) => listSections(tripId, signal),
+    select: (list) => list.sections,
+    refetchInterval: (query) => (query.state.data?.pendingPhotos ? POLL_MS : false),
   })
 }
 

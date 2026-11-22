@@ -38,6 +38,7 @@ const service = new MapService(repo, store, geocoder, access, () => NOW);
 const cached = (query: string, hit: GeoHit | null, ageDays = 0): GeocodeRow => ({
   query,
   hit,
+  tags: {},
   checkedAt: new Date(NOW - ageDays * DAY),
 });
 const stay = (input: Partial<MapItems['stays'][number]>) => ({ id: 1, name: 'Hotel V', address: null, mapUrl: null, ...input });

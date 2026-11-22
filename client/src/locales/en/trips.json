@@ -54,5 +54,62 @@
       "deleteFailed": "Couldn't delete the trip. Please try again.",
       "deleteTitle": "Delete this trip?",
       "deleteDescription": "\"{{title}}\" will be permanently deleted for everyone on it. This can't be undone."
+  },
+  "members": {
+    "share": "Share",
+    "you": "You",
+    "roleOf": "Role of {{name}}",
+    "roleChanged": "Role updated",
+    "roleFailed": "Couldn't change the role. Please try again.",
+    "remove": "Remove {{name}}",
+    "removeTitle": "Remove from the trip?",
+    "removeDescription": "{{name}} will no longer see this trip. You can invite them again later.",
+    "removeConfirm": "Remove",
+    "removed": "Removed from the trip",
+    "removeFailed": "Couldn't remove them. Please try again.",
+    "leave": "Leave trip",
+    "leaveTitle": "Leave this trip?",
+    "leaveDescription": "You'll no longer see \"{{title}}\". You'll need a new invite to come back.",
+    "leaveConfirm": "Leave",
+    "left": "You left the trip",
+    "leaveFailed": "Couldn't leave the trip. Please try again.",
+    "cancel": "Cancel"
+  },
+  "share": {
+    "title": "Share this trip",
+    "description": "Anyone with the link who signs in can join the trip.",
+    "role": "People who join can",
+    "roleHint": {
+      "EDITOR": "Add and change everything in the trip",
+      "VIEWER": "See the trip without changing it"
+    },
+    "create": "Create link",
+    "link": "Invite link",
+    "copy": "Copy",
+    "copied": "Link copied",
+    "copyFailed": "Couldn't copy. Select the link and copy it yourself.",
+    "send": "Share…",
+    "sendText": "Join my trip \"{{title}}\" on Trip It",
+    "turnOff": "Turn off link",
+    "turnedOff": "The link no longer works",
+    "failed": "Something went wrong. Please try again.",
+    "loadFailed": "Couldn't load the invite link."
+  },
+  "invite": {
+    "title": "You're invited",
+    "subtitle": "{{name}} invited you to a trip",
+    "subtitleNoName": "You've been invited to a trip",
+    "as": "You'll join as",
+    "join": "Join trip",
+    "joined": "You joined the trip",
+    "joinFailed": "Couldn't join the trip. Please try again.",
+    "alreadyMember": "You're already on this trip.",
+    "open": "Open trip",
+    "goneTitle": "This link doesn't work",
+    "goneSubtitle": "It may have been turned off. Ask for a new one.",
+    "errorSubtitle": "Couldn't load the invite. Please try again.",
+    "retry": "Retry",
+    "home": "Go to my trips",
+    "loading": "Loading invite"
   }
 }

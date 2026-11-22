@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { AppError } from '../../shared/errors/AppError';
 import type { TripAccess } from '../../shared/tripItems/tripItem.types';
 import type { TripRecord, TripRole } from '../trips/trips.types';
+import type { PlacePhotos } from '../photos/photo.types';
 import { placeSchema } from './sections.schema';
 import { SectionsService } from './sections.service';
 import type { ISectionsRepository, PlaceData, PlaceRecord, SectionRecord } from './sections.types';
@@ -33,11 +34,11 @@ class FakeRepo implements ISectionsRepository {
     this.sections = this.sections.filter((s) => s.id !== sectionId);
   }
   async createPlace(sectionId: number, data: PlaceData) {
-    const place: PlaceRecord = { id: this.nextId++, sectionId, ...data };
+    const place: PlaceRecord = { id: this.nextId++, sectionId, photoUrl: null, photoCheckedAt: null, ...data };
     this.sections.find((s) => s.id === sectionId)!.places.push(place);
     return place;
   }
-  async updatePlace(placeId: number, data: Partial<PlaceData>) {
+  async updatePlace(placeId: number, data: Partial<PlaceRecord>) {
     const place = this.sections.flatMap((s) => s.places).find((p) => p.id === placeId)!;
     return Object.assign(place, data);
   }
@@ -52,7 +53,16 @@ const access: TripAccess = {
     const role = ROLES[userId];
     if (!role) throw new AppError('Trip not found', 404);
     if (!allowed.includes(role)) throw new AppError('Forbidden', 403);
-    return { id: tripId, currency: 'ILS' } as TripRecord;
+    return { id: tripId, currency: 'ILS', destination: 'Amsterdam' } as TripRecord;
+  },
+};
+
+let discarded: (string | null)[];
+const photos: PlacePhotos = {
+  // Stands in for the real lookups: every place still unchecked counts as under way.
+  refresh: (_destination, places) => places.filter((p) => !p.photoCheckedAt).length,
+  async discard(photoUrl) {
+    if (photoUrl) discarded.push(photoUrl);
   },
 };
 
@@ -67,13 +77,14 @@ describe('SectionsService', () => {
     repo = new FakeRepo();
     repo.seedTrip(1);
     repo.seedTrip(2);
-    service = new SectionsService(repo, access);
+    service = new SectionsService(repo, access, photos);
+    discarded = [];
     attractions = repo.sections[0].id;
   });
 
   it('lists the trip\'s sections with their places', async () => {
     await service.createPlace(1, 1, attractions, place({ date: '2026-05-13' }));
-    const sections = await service.list(3, 1);
+    const { sections } = await service.list(3, 1);
     expect(sections.map((s) => s.kind)).toEqual(['ATTRACTIONS', 'RESTAURANTS']);
     expect(sections[0].places).toMatchObject([{ name: 'Rijksmuseum', date: '2026-05-13', done: false }]);
   });
@@ -84,7 +95,7 @@ describe('SectionsService', () => {
     const renamed = await service.update(1, 1, created.id, { name: 'Cafes', icon: 'cake' });
     expect(renamed.name).toBe('Cafes');
     await service.remove(1, 1, created.id);
-    expect(await service.list(1, 1)).toHaveLength(2);
+    expect((await service.list(1, 1)).sections).toHaveLength(2);
   });
 
   it('refuses to rename or delete the built-in sections', async () => {
@@ -107,6 +118,46 @@ describe('SectionsService', () => {
     const created = await service.createPlace(1, 1, attractions, place({ notes: 'book ahead' }));
     const done = await service.setPlaceDone(1, 1, attractions, created.id, true);
     expect(done).toMatchObject({ done: true, notes: 'book ahead' });
+  });
+
+  it('reports photo lookups under way and keeps the bookkeeping to itself', async () => {
+    const created = await service.createPlace(1, 1, attractions, place({}));
+    expect(created).toMatchObject({ photoUrl: null });
+    expect(created).not.toHaveProperty('photoCheckedAt');
+    expect((await service.list(1, 1)).pendingPhotos).toBe(1);
+    await repo.updatePlace(created.id, { photoUrl: '/api/uploads/places/1.webp', photoCheckedAt: new Date() });
+    const list = await service.list(1, 1);
+    expect(list.pendingPhotos).toBe(0);
+    expect(list.sections[0].places[0].photoUrl).toBe('/api/uploads/places/1.webp');
+  });
+
+  it('keeps the photo through an edit unless the name or the website changes', async () => {
+    const found = { photoUrl: '/api/uploads/places/1.webp', photoCheckedAt: new Date() };
+    const created = await service.createPlace(1, 1, attractions, place({}));
+    await repo.updatePlace(created.id, found);
+
+    const noted = await service.updatePlace(1, 1, attractions, created.id, place({ notes: 'book ahead' }));
+    expect(noted.photoUrl).toBe(found.photoUrl);
+    expect(discarded).toEqual([]);
+
+    const renamed = await service.updatePlace(1, 1, attractions, created.id, place({ name: 'Van Gogh Museum' }));
+    expect(renamed.photoUrl).toBeNull();
+    expect(discarded).toEqual([found.photoUrl]);
+    expect((await service.list(1, 1)).pendingPhotos).toBe(1);
+  });
+
+  it('removes the photo file with its place or its section', async () => {
+    const found = { photoUrl: '/api/uploads/places/1.webp', photoCheckedAt: new Date() };
+    const created = await service.createPlace(1, 1, attractions, place({}));
+    await repo.updatePlace(created.id, found);
+    await service.removePlace(1, 1, attractions, created.id);
+
+    const custom = await service.create(1, 1, { name: 'Cafes', icon: 'coffee' });
+    const cafe = await service.createPlace(1, 1, custom.id, place({ name: 'Cafe' }));
+    await repo.updatePlace(cafe.id, { photoUrl: '/api/uploads/places/2.webp', photoCheckedAt: new Date() });
+    await service.remove(1, 1, custom.id);
+
+    expect(discarded).toEqual(['/api/uploads/places/1.webp', '/api/uploads/places/2.webp']);
   });
 
   it('does not reach sections or places of another trip', async () => {

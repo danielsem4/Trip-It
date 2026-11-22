@@ -35,5 +35,8 @@ export const updateTripSchema = z.object({
   coverColor: coverColor.optional(),
 });
 
+export const guestRole = z.enum(['EDITOR', 'VIEWER']);
+export const memberRoleSchema = z.object({ role: guestRole });
+
 export type CreateTripDto = z.infer<typeof createTripSchema>;
 export type UpdateTripDto = z.infer<typeof updateTripSchema>;

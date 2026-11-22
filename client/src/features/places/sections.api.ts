@@ -6,9 +6,15 @@ export interface SectionFormData {
   icon: string
 }
 
-export async function listSections(tripId: number, signal?: AbortSignal): Promise<Section[]> {
-  const response = await apiClient.get<{ sections: Section[] }>(`/trips/${tripId}/sections`, { signal })
-  return response.data.sections
+export interface SectionsList {
+  sections: Section[]
+  // Photo lookups still running on the server.
+  pendingPhotos: number
+}
+
+export async function listSections(tripId: number, signal?: AbortSignal): Promise<SectionsList> {
+  const response = await apiClient.get<SectionsList>(`/trips/${tripId}/sections`, { signal })
+  return response.data
 }
 
 export async function createSection(tripId: number, data: SectionFormData): Promise<Section> {

@@ -25,3 +25,8 @@ export function transportQueries(place: string | null, destination: string): str
   const text = place?.trim();
   return text ? candidates(text, `${text}, ${destination}`) : [];
 }
+
+// Finds the venue itself rather than its street address: that's the entry that carries photo tags.
+export function photoQuery(name: string, destination: string): string | null {
+  return candidates(`${name}, ${destination}`)[0] ?? null;
+}

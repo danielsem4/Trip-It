@@ -14,7 +14,7 @@ export function createSectionsController(service: SectionsService) {
     async list(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const { userId, tripId } = ids(req, res);
-        res.json({ sections: await service.list(userId, tripId) });
+        res.json(await service.list(userId, tripId));
       } catch (err) {
         next(err);
       }
