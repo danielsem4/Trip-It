@@ -1,4 +1,16 @@
 {
   "welcome": "Welcome, {{name}}",
-  "subtitle": "Your trips will show up here."
+  "subtitle": "Where are we headed next?",
+  "newTrip": "New trip",
+  "hero": { "now": "Happening now", "next": "Next trip" },
+  "tabs": { "label": "Trip lists", "mine": "My trips", "shared": "Shared with me" },
+  "groups": { "now": "Now", "upcoming": "Upcoming", "past": "Past ({{count}})" },
+  "empty": {
+    "title": "No trips yet",
+    "description": "Plan your first adventure and bring your travel companions along.",
+    "cta": "Create your first trip"
+  },
+  "sharedEmpty": "No one has shared a trip with you yet.",
+  "loadFailed": "Couldn't load your trips.",
+  "retry": "Retry"
 }

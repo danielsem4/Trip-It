@@ -24,3 +24,7 @@ export {
 } from './hooks/useTrips'
 export { useTripCountdown } from './hooks/useTripCountdown'
 export { TripDetailsPage } from './pages/TripDetailsPage'
+export { TripCard } from './components/TripCard'
+export { TripCover } from './components/TripCover'
+export { MemberAvatars } from './components/MemberAvatars'
+export { TripFormDialog } from './components/TripFormDialog'
