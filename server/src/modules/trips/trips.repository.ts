@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client';
 import prisma from '../../lib/prisma';
 import { num } from '../../shared/utils/price';
-import type { ITripsRepository, TripRecord, TripWriteData } from './trips.types';
+import type { GuestRole, ITripsRepository, TripRecord, TripWriteData } from './trips.types';
 
 const include = {
   members: {
@@ -50,5 +50,21 @@ export class TripsRepository implements ITripsRepository {
 
   async delete(tripId: number): Promise<void> {
     await prisma.trip.delete({ where: { id: tripId } });
+  }
+
+  async setMemberRole(tripId: number, userId: number, role: GuestRole): Promise<void> {
+    await prisma.tripMember.update({ where: { tripId_userId: { tripId, userId } }, data: { role } });
+  }
+
+  async removeMember(tripId: number, userId: number): Promise<void> {
+    await prisma.tripMember.delete({ where: { tripId_userId: { tripId, userId } } });
+  }
+
+  async listPlacePhotos(tripId: number): Promise<string[]> {
+    const places = await prisma.place.findMany({
+      where: { section: { tripId }, photoUrl: { not: null } },
+      select: { photoUrl: true },
+    });
+    return places.flatMap(({ photoUrl }) => (photoUrl ? [photoUrl] : []));
   }
 }

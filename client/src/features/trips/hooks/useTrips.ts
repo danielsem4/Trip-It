@@ -1,19 +1,28 @@
 import axios from 'axios'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  acceptInvite,
   createTrip,
   deleteTrip,
+  deleteTripInvite,
+  getInvite,
   getTrip,
+  getTripInvite,
   listTrips,
+  removeMember,
   removeTripCover,
+  saveTripInvite,
+  setMemberRole,
   updateTrip,
   uploadTripCover,
 } from '../api/trips.api'
 import type { TripFormData } from '../schemas/trip.schema'
+import type { GuestRole } from '../types/trip.types'
 
 export const tripKeys = {
   all: ['trips'] as const,
   detail: (id: number) => ['trips', id] as const,
+  invite: (id: number) => ['trips', id, 'invite'] as const,
 }
 
 export function useTripsQuery() {
@@ -77,6 +86,78 @@ export function useRemoveTripCover(id: number) {
   const invalidate = useInvalidateTrips()
   return useMutation({
     mutationFn: () => removeTripCover(id),
+    onSuccess: invalidate,
+  })
+}
+
+export function useSetMemberRole(id: number) {
+  const invalidate = useInvalidateTrips()
+  return useMutation({
+    mutationFn: ({ userId, role }: { userId: number; role: GuestRole }) => setMemberRole(id, userId, role),
+    onSuccess: invalidate,
+  })
+}
+
+export function useRemoveMember(id: number) {
+  const invalidate = useInvalidateTrips()
+  return useMutation({
+    mutationFn: (userId: number) => removeMember(id, userId),
+    onSuccess: invalidate,
+  })
+}
+
+// Leaving is removing yourself: afterwards the trip is gone for you, like a deleted one.
+export function useLeaveTrip(id: number) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (userId: number) => removeMember(id, userId),
+    onSuccess: async () => {
+      await queryClient.cancelQueries({ queryKey: tripKeys.detail(id) })
+      queryClient.removeQueries({ queryKey: tripKeys.detail(id) })
+      await queryClient.invalidateQueries({ queryKey: tripKeys.all, exact: true })
+    },
+  })
+}
+
+// The trip's share link; only its owner may ask.
+export function useTripInviteQuery(id: number, enabled = true) {
+  return useQuery({
+    enabled,
+    queryKey: tripKeys.invite(id),
+    queryFn: ({ signal }) => getTripInvite(id, signal),
+  })
+}
+
+export function useSaveTripInvite(id: number) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (role: GuestRole) => saveTripInvite(id, role),
+    onSuccess: (invite) => queryClient.setQueryData(tripKeys.invite(id), invite),
+  })
+}
+
+export function useDeleteTripInvite(id: number) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => deleteTripInvite(id),
+    onSuccess: () => queryClient.setQueryData(tripKeys.invite(id), null),
+  })
+}
+
+export function useInviteQuery(token: string) {
+  return useQuery({
+    // A 404 is a definitive answer (the link was turned off) -- don't retry it.
+    retry: (count, error) =>
+      !(axios.isAxiosError(error) && error.response?.status === 404) && count < 3,
+    queryKey: ['invites', token] as const,
+    queryFn: ({ signal }) => getInvite(token, signal),
+  })
+}
+
+export function useAcceptInvite(token: string) {
+  const invalidate = useInvalidateTrips()
+  return useMutation({
+    mutationFn: () => acceptInvite(token),
     onSuccess: invalidate,
   })
 }

@@ -42,6 +42,8 @@ export interface CardLine {
 
 export interface CardContent {
   title: string
+  // A thumbnail shown beside the text.
+  image?: string | null
   badge?: string
   lines: CardLine[]
   links?: { label: string; url: string }[]

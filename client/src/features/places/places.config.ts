@@ -36,6 +36,8 @@ export interface Place extends Price {
   website: string | null
   notes: string | null
   done: boolean
+  // Found by the server from the place's name; null while it's looking, or when there is none.
+  photoUrl: string | null
 }
 
 export type SectionKind = 'ATTRACTIONS' | 'RESTAURANTS' | 'CUSTOM'
@@ -115,5 +117,5 @@ export function placeCard(place: Place, t: TFunction<'tripItems'>, locale: strin
   if (place.mapUrl) links.push({ label: t('common.map'), url: place.mapUrl })
   if (place.website) links.push({ label: t('common.website'), url: place.website })
 
-  return { title: place.name, lines, links, notes: place.notes, price: place }
+  return { title: place.name, image: place.photoUrl, lines, links, notes: place.notes, price: place }
 }

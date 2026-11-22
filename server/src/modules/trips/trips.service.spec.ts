@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TripsService } from './trips.service';
-import type { ITripsRepository, TripRecord, TripRole, TripWriteData } from './trips.types';
+import type { GuestRole, ITripsRepository, TripRecord, TripRole, TripWriteData } from './trips.types';
 
 const USERS: Record<number, { name: string | null; email: string }> = {
   1: { name: 'Owner', email: 'owner@x.com' },
@@ -43,6 +43,16 @@ class FakeRepo implements ITripsRepository {
   }
   async delete(id: number) {
     this.trips = this.trips.filter((t) => t.id !== id);
+  }
+  async listPlacePhotos() {
+    return [];
+  }
+  async setMemberRole(tripId: number, userId: number, role: GuestRole) {
+    this.trips.find((t) => t.id === tripId)!.members.find((m) => m.userId === userId)!.role = role;
+  }
+  async removeMember(tripId: number, userId: number) {
+    const trip = this.trips.find((t) => t.id === tripId)!;
+    trip.members = trip.members.filter((m) => m.userId !== userId);
   }
   addMember(tripId: number, userId: number, role: TripRole) {
     this.trips.find((t) => t.id === tripId)!.members.push({ userId, role, user: USERS[userId] });
@@ -133,5 +143,35 @@ describe('TripsService', () => {
     const trip = await service.get(2, tripId);
     expect(trip.myRole).toBe('EDITOR');
     expect(trip.members.map((m) => m.role)).toEqual(['OWNER', 'EDITOR', 'VIEWER']);
+  });
+
+  it('owner changes what a member may do', async () => {
+    const trip = await service.setMemberRole(1, tripId, 3, 'EDITOR');
+    expect(trip.members.find((m) => m.userId === 3)!.role).toBe('EDITOR');
+    await expect(service.update(3, tripId, { title: 'x' })).resolves.toMatchObject({ title: 'x' });
+  });
+
+  it('nobody but the owner changes roles, and the owner\'s own stays', async () => {
+    await expect(service.setMemberRole(2, tripId, 3, 'EDITOR')).rejects.toMatchObject({ statusCode: 403 });
+    await expect(service.setMemberRole(1, tripId, 1, 'VIEWER')).rejects.toMatchObject({ statusCode: 400 });
+    await expect(service.setMemberRole(1, tripId, 4, 'VIEWER')).rejects.toMatchObject({ statusCode: 404 });
+  });
+
+  it('owner removes a member, who then no longer finds the trip', async () => {
+    await service.removeMember(1, tripId, 2);
+    await expect(service.get(2, tripId)).rejects.toMatchObject({ statusCode: 404 });
+    expect(await service.list(2)).toEqual([]);
+  });
+
+  it('a member can leave but cannot remove anyone else', async () => {
+    await expect(service.removeMember(2, tripId, 3)).rejects.toMatchObject({ statusCode: 403 });
+    await expect(service.removeMember(2, tripId, 1)).rejects.toMatchObject({ statusCode: 403 });
+    await service.removeMember(3, tripId, 3);
+    expect((await service.get(1, tripId)).members.map((m) => m.userId)).toEqual([1, 2]);
+  });
+
+  it('the owner cannot leave, and outsiders reach nothing', async () => {
+    await expect(service.removeMember(1, tripId, 1)).rejects.toMatchObject({ statusCode: 400 });
+    await expect(service.removeMember(4, tripId, 4)).rejects.toMatchObject({ statusCode: 404 });
   });
 });

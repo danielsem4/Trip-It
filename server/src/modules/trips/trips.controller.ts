@@ -3,7 +3,9 @@ import type { TripsService } from './trips.service';
 import fs from 'fs';
 import { AppError } from '../../shared/errors/AppError';
 import { deleteCoverFile } from './trips.upload';
+import { placePhotos } from '../photos/placePhotos';
 import type { CreateTripDto, UpdateTripDto } from './trips.schema';
+import type { GuestRole } from './trips.types';
 
 export function createTripsController(service: TripsService) {
   return {
@@ -49,8 +51,39 @@ export function createTripsController(service: TripsService) {
 
     async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-        const { coverImageUrl } = await service.remove(req.currentUser!.userId, res.locals['id'] as number);
+        const { coverImageUrl, placePhotoUrls } = await service.remove(
+          req.currentUser!.userId,
+          res.locals['id'] as number,
+        );
         await deleteCoverFile(coverImageUrl).catch(() => undefined);
+        await Promise.all(placePhotoUrls.map((url) => placePhotos.discard(url)));
+        res.status(204).end();
+      } catch (err) {
+        next(err);
+      }
+    },
+
+    async setMemberRole(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        const trip = await service.setMemberRole(
+          req.currentUser!.userId,
+          res.locals['id'] as number,
+          res.locals['userId'] as number,
+          (req.body as { role: GuestRole }).role,
+        );
+        res.json({ trip });
+      } catch (err) {
+        next(err);
+      }
+    },
+
+    async removeMember(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        await service.removeMember(
+          req.currentUser!.userId,
+          res.locals['id'] as number,
+          res.locals['userId'] as number,
+        );
         res.status(204).end();
       } catch (err) {
         next(err);

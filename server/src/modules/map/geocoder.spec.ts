@@ -1,15 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { NominatimGeocoder, type FetchLike } from './geocoder';
-import type { GeoHit, IGeocodeStore } from './map.types';
+import type { GeoHit, GeoTags, IGeocodeStore } from './map.types';
 
 function setup(respond: (url: URL) => { ok?: boolean; status?: number; body?: unknown }) {
   const saved = new Map<string, GeoHit | null>();
+  const tags = new Map<string, GeoTags>();
   const store: IGeocodeStore = {
     async find() {
       return [];
     },
-    async save(query, hit) {
+    async save(query, hit, found) {
       saved.set(query, hit);
+      tags.set(query, found);
     },
   };
   const calls: URL[] = [];
@@ -29,7 +31,7 @@ function setup(respond: (url: URL) => { ok?: boolean; status?: number; body?: un
     now: () => clock,
   });
   const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
-  return { geocoder, saved, calls, waits, settle, advance: (ms: number) => (clock += ms) };
+  return { geocoder, saved, tags, calls, waits, settle, advance: (ms: number) => (clock += ms) };
 }
 
 const amsterdam = { lat: '52.37', lon: '4.89', boundingbox: ['52.3', '52.4', '4.7', '5.0'] };
@@ -42,6 +44,15 @@ describe('NominatimGeocoder', () => {
     expect(saved.get('amsterdam')).toEqual({ lat: 52.37, lng: 4.89, bbox: [52.3, 52.4, 4.7, 5.0] });
     expect(calls[0]!.pathname).toBe('/search');
     expect(calls[0]!.searchParams.get('q')).toBe('amsterdam');
+  });
+
+  it('asks for the place\'s tags and saves the text ones', async () => {
+    const casino = { ...amsterdam, extratags: { wikidata: 'Q2982262', building: 'yes', levels: 3 } };
+    const { geocoder, tags, calls, settle } = setup(() => ({ body: [casino] }));
+    geocoder.enqueue('holland casino, amsterdam');
+    await settle();
+    expect(calls[0]!.searchParams.get('extratags')).toBe('1');
+    expect(tags.get('holland casino, amsterdam')).toEqual({ wikidata: 'Q2982262', building: 'yes' });
   });
 
   it('saves a miss as null', async () => {

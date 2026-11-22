@@ -73,6 +73,7 @@ model Trip {
   currency      String    @default("ILS") // main currency for the budget
   budgetAmount  Decimal?  @db.Decimal(12, 2)
   members       TripMember[]
+  invite        TripInvite?
   sections      TripSection[]
   flights       Flight[]
   stays         Stay[]
@@ -95,6 +96,16 @@ model TripMember {
 
   @@unique([tripId, userId])
   @@index([userId])
+}
+
+// The trip's share link, while it's on. Whoever opens it can join with `role` (never OWNER).
+model TripInvite {
+  id        Int      @id @default(autoincrement())
+  tripId    Int      @unique
+  token     String   @unique
+  role      TripRole
+  createdAt DateTime @default(now())
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 }
 
 // ─── Trip content ────────────────────────────────────────
@@ -129,6 +140,9 @@ model Place {
   done          Boolean     @default(false)
   priceAmount   Decimal?    @db.Decimal(12, 2)
   priceCurrency String?
+  // Found automatically (see modules/photos). photoCheckedAt is null until a lookup has finished.
+  photoUrl       String?
+  photoCheckedAt DateTime?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   section       TripSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
@@ -242,5 +256,6 @@ model GeocodeCache {
   lat       Float?
   lng       Float?
   bbox      Float[] // [south, north, west, east], or empty
+  tags      Json? // OpenStreetMap tags of the hit; null on rows saved before tags were asked for
   checkedAt DateTime @default(now())
 }

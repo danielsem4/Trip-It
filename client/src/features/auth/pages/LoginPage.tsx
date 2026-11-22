@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ArrowRight, Lock, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FormField } from '@/components/common/FormField'
@@ -15,6 +15,8 @@ import { createLoginSchema, type LoginFormData } from '../schemas/auth.schema'
 
 export function LoginPage() {
   const { t, i18n } = useTranslation('auth')
+  // Carried across to the other form, so signing up also returns to where they were headed.
+  const location = useLocation()
   const { mutate: login, isPending, errorMessage } = useLogin()
   const [showPassword, toggleShowPassword] = useToggle()
 
@@ -64,7 +66,7 @@ export function LoginPage() {
         </LoadingButton>
         <p className="text-center text-sm text-muted-foreground">
           {t('login.noAccount')}{' '}
-          <Link to="/register" className="font-medium text-primary hover:underline">
+          <Link to="/register" state={location.state} className="font-medium text-primary hover:underline">
             {t('login.toRegister')}
           </Link>
         </p>

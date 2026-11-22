@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { LoginPage, RegisterPage } from '@/features/auth'
 import { HomePage } from '@/features/home'
-import { TripLayout } from '@/features/trips'
+import { InvitePage, TripLayout } from '@/features/trips'
 import { TripOverviewPage } from '@/features/tripOverview'
 import { FlightsPage } from '@/features/flights'
 import { StaysPage } from '@/features/stays'
@@ -29,6 +29,7 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      { path: '/invite/:token', element: <InvitePage /> },
       {
         element: <AppLayout />,
         children: [
