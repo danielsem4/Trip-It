@@ -15,6 +15,7 @@ export interface TripShape {
   endDate: string | null; // 'YYYY-MM-DD'
   coverColor: string;
   coverImageUrl: string | null;
+  currency: string; // main currency, ISO 4217
   myRole: TripRole;
   members: TripMemberShape[]; // owner first
 }
@@ -27,6 +28,8 @@ export interface TripRecord {
   endDate: Date | null;
   coverColor: string;
   coverImageUrl: string | null;
+  currency: string;
+  budgetAmount: number | null;
   members: { userId: number; role: TripRole; user: { name: string | null; email: string } }[];
 }
 
@@ -37,6 +40,8 @@ export interface TripWriteData {
   endDate: Date | null;
   coverColor: string;
   coverImageUrl?: string | null;
+  currency?: string;
+  budgetAmount?: number | null;
 }
 
 export interface ITripsRepository {

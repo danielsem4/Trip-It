@@ -1,4 +1,5 @@
 import { AppError } from '../../shared/errors/AppError';
+import { toDate, toDay } from '../../shared/utils/dates';
 import type { CreateTripDto, UpdateTripDto } from './trips.schema';
 import type {
   ITripsRepository,
@@ -10,8 +11,6 @@ import type {
 
 const ROLE_ORDER: Record<TripRole, number> = { OWNER: 0, EDITOR: 1, VIEWER: 2 };
 
-const toDate = (s: string): Date => new Date(s + 'T00:00:00Z');
-const toDay = (d: Date): string => d.toISOString().slice(0, 10);
 
 function toShape(record: TripRecord, userId: number): TripShape {
   const members = [...record.members]
@@ -27,6 +26,7 @@ function toShape(record: TripRecord, userId: number): TripShape {
     endDate: record.endDate ? toDay(record.endDate) : null,
     coverColor: record.coverColor,
     coverImageUrl: record.coverImageUrl,
+    currency: record.currency,
     myRole: mine.role,
     members,
   };
@@ -96,7 +96,8 @@ export class TripsService {
     return { trip: toShape(updated, userId), previousUrl: existing.coverImageUrl };
   }
 
-  private async requireRole(userId: number, tripId: number, allowed: TripRole[]): Promise<TripRecord> {
+  // Membership gate for everything inside a trip: 404 for non-members, 403 for a low role.
+  async requireRole(userId: number, tripId: number, allowed: TripRole[]): Promise<TripRecord> {
     const record = await this.repo.findById(tripId);
     const member = record?.members.find((m) => m.userId === userId);
     if (!record || !member) throw new AppError('Trip not found', 404);

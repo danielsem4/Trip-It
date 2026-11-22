@@ -16,6 +16,28 @@ enum Role {
   USER
 }
 
+enum TripSectionKind {
+  ATTRACTIONS
+  RESTAURANTS
+  CUSTOM
+}
+
+enum StayType {
+  HOTEL
+  APARTMENT
+  OTHER
+}
+
+enum TransportType {
+  TRAIN
+  BUS
+  CAR_RENTAL
+  TAXI
+  FERRY
+  TRANSFER
+  OTHER
+}
+
 enum TripRole {
   OWNER
   EDITOR
@@ -48,7 +70,15 @@ model Trip {
   endDate       DateTime? @db.Date
   coverColor    String    @default("sky")
   coverImageUrl String?
+  currency      String    @default("ILS") // main currency for the budget
+  budgetAmount  Decimal?  @db.Decimal(12, 2)
   members       TripMember[]
+  sections      TripSection[]
+  flights       Flight[]
+  stays         Stay[]
+  transports    Transport[]
+  expenses      Expense[]
+  currencyRates TripCurrencyRate[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -65,4 +95,141 @@ model TripMember {
 
   @@unique([tripId, userId])
   @@index([userId])
+}
+
+// ─── Trip content ────────────────────────────────────────
+// Dates are calendar dates and times are local 'HH:mm' strings: no timezones.
+// Prices are optional; priceCurrency is an ISO 4217 code and set whenever priceAmount is.
+
+// A list of places. Every trip has one ATTRACTIONS and one RESTAURANTS section;
+// CUSTOM sections are user-defined and carry a name and an icon key.
+model TripSection {
+  id        Int             @id @default(autoincrement())
+  tripId    Int
+  kind      TripSectionKind
+  name      String?
+  icon      String?
+  createdAt DateTime        @default(now())
+  trip      Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  places    Place[]
+
+  @@index([tripId])
+}
+
+model Place {
+  id            Int         @id @default(autoincrement())
+  sectionId     Int
+  name          String
+  address       String?
+  mapUrl        String?
+  date          DateTime?   @db.Date
+  time          String?
+  website       String?
+  notes         String?
+  done          Boolean     @default(false)
+  priceAmount   Decimal?    @db.Decimal(12, 2)
+  priceCurrency String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  section       TripSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId])
+}
+
+model Flight {
+  id            Int       @id @default(autoincrement())
+  tripId        Int
+  airline       String?
+  flightNumber  String
+  fromAirport   String
+  toAirport     String
+  departDate    DateTime  @db.Date
+  departTime    String?
+  arriveDate    DateTime? @db.Date
+  arriveTime    String?
+  terminal      String?
+  confirmation  String?
+  seat          String?
+  notes         String?
+  priceAmount   Decimal?  @db.Decimal(12, 2)
+  priceCurrency String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model Stay {
+  id            Int      @id @default(autoincrement())
+  tripId        Int
+  type          StayType @default(HOTEL)
+  name          String
+  address       String?
+  mapUrl        String?
+  checkInDate   DateTime @db.Date
+  checkInTime   String?
+  checkOutDate  DateTime @db.Date
+  checkOutTime  String?
+  confirmation  String?
+  website       String?
+  phone         String?
+  notes         String?
+  priceAmount   Decimal? @db.Decimal(12, 2)
+  priceCurrency String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  trip          Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model Transport {
+  id            Int           @id @default(autoincrement())
+  tripId        Int
+  type          TransportType @default(OTHER)
+  title         String
+  fromPlace     String?
+  toPlace       String?
+  date          DateTime      @db.Date
+  time          String?
+  endDate       DateTime?     @db.Date
+  endTime       String?
+  provider      String?
+  confirmation  String?
+  notes         String?
+  priceAmount   Decimal?      @db.Decimal(12, 2)
+  priceCurrency String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  trip          Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+// A budget line that doesn't belong to any section (insurance, shopping, ...).
+model Expense {
+  id            Int       @id @default(autoincrement())
+  tripId        Int
+  title         String
+  date          DateTime? @db.Date
+  notes         String?
+  priceAmount   Decimal   @db.Decimal(12, 2)
+  priceCurrency String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+// User-entered exchange rate: 1 unit of `currency` = `rate` units of the trip's main currency.
+model TripCurrencyRate {
+  id       Int     @id @default(autoincrement())
+  tripId   Int
+  currency String
+  rate     Decimal @db.Decimal(14, 6)
+  trip     Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, currency])
 }

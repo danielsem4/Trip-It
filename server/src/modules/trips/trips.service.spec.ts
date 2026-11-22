@@ -28,6 +28,8 @@ class FakeRepo implements ITripsRepository {
       endDate: data.endDate,
       coverColor: data.coverColor,
       coverImageUrl: data.coverImageUrl ?? null,
+      currency: data.currency ?? 'ILS',
+      budgetAmount: data.budgetAmount ?? null,
       members: [{ userId, role: 'OWNER', user: USERS[userId] }],
     };
     this.trips.push(rec);
