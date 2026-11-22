@@ -1,7 +1,21 @@
 {
   "appName": "Trip It",
-  "language": "עברית",
-  "signOut": "Sign out",
+  "nav": {
+    "home": "Home",
+    "settings": "Settings",
+    "logout": "Log out",
+    "hello": "Hello, {{name}}",
+    "openMenu": "Open menu",
+    "menu": "Main navigation",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar"
+  },
+  "logoutDialog": {
+    "title": "Log out?",
+    "description": "Are you sure you want to log out of your account?",
+    "cancel": "Cancel",
+    "confirm": "Log out"
+  },
   "errors": {
     "notFound": {
       "title": "Page not found",

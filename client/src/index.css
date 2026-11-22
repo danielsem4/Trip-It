@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 html, body, #root { height: 100%; margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* Palette: cool medical-white, medical blue primary, warm orange highlight (used sparingly). */
 :root {
@@ -116,8 +117,21 @@ html, body, #root { height: 100%; margin: 0; }
 
 body {
   margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fixed backdrop layer: `background-attachment: fixed` is ignored/janky on iOS. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   background: var(--glass-backdrop);
-  background-attachment: fixed;
+}
+
+/* Removes the double-tap zoom delay on touch devices. */
+a, button, [role="button"], input, select, textarea, label {
+  touch-action: manipulation;
 }
 
 /* Frosted-glass surfaces. Pair with text-*-foreground as usual. */

@@ -6,9 +6,9 @@ export function HomePage() {
   const { user } = useAuth()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
-      <h1 className="text-3xl font-semibold">{t('welcome', { name: user?.name ?? user?.email })}</h1>
-      <p className="text-muted-foreground">{t('subtitle')}</p>
+    <div className="flex flex-col items-center justify-center gap-2 py-10 text-center sm:py-16">
+      <h1 className="text-2xl font-semibold text-balance sm:text-3xl">{t('welcome', { name: user?.name ?? user?.email })}</h1>
+      <p className="text-balance text-muted-foreground">{t('subtitle')}</p>
     </div>
   )
 }

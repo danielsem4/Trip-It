@@ -1,0 +1,12 @@
+{
+  "profile": {
+    "title": "פרופיל",
+    "name": "שם",
+    "email": "אימייל",
+    "role": "תפקיד",
+    "roles": { "ADMIN": "מנהל", "USER": "משתמש" }
+  },
+  "appearance": "מראה",
+  "themes": { "light": "בהיר", "dark": "כהה", "system": "מערכת" },
+  "language": "שפה"
+}

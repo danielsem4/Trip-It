@@ -1,7 +1,21 @@
 {
   "appName": "Trip It",
-  "language": "English",
-  "signOut": "התנתקות",
+  "nav": {
+    "home": "בית",
+    "settings": "הגדרות",
+    "logout": "התנתקות",
+    "hello": "שלום, {{name}}",
+    "openMenu": "פתיחת תפריט",
+    "menu": "ניווט ראשי",
+    "collapseSidebar": "כיווץ תפריט",
+    "expandSidebar": "הרחבת תפריט"
+  },
+  "logoutDialog": {
+    "title": "להתנתק?",
+    "description": "האם אתה בטוח שברצונך להתנתק מהחשבון?",
+    "cancel": "ביטול",
+    "confirm": "התנתקות"
+  },
   "errors": {
     "notFound": {
       "title": "הדף לא נמצא",
