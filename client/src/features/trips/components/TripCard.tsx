@@ -28,7 +28,7 @@ export function TripCard({ trip, today }: Readonly<TripCardProps>) {
       </div>
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="min-w-0 truncate text-base font-semibold">{trip.title}</h3>
+          <h3 className="min-w-0 truncate text-base font-semibold"><bdi>{trip.title}</bdi></h3>
           {trip.myRole !== 'OWNER' && (
             <span className="bg-secondary text-secondary-foreground shrink-0 rounded-full px-2 py-0.5 text-xs font-medium">
               {t(`card.role.${trip.myRole}`)}
@@ -37,7 +37,7 @@ export function TripCard({ trip, today }: Readonly<TripCardProps>) {
         </div>
         <p className="text-muted-foreground flex items-center gap-1 text-sm">
           <MapPin className="size-3.5 shrink-0" aria-hidden />
-          <span className="truncate">{trip.destination}</span>
+          <span className="truncate"><bdi>{trip.destination}</bdi></span>
         </p>
         <p className="text-muted-foreground text-sm">{formatTripDates(trip, locale)}</p>
         <div className="mt-1 flex items-center justify-between gap-2">

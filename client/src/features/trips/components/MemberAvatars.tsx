@@ -26,7 +26,7 @@ export function MemberAvatars({ members, max = 3 }: Readonly<MemberAvatarsProps>
           title={m.name ?? m.email}
           className="bg-primary/15 text-primary ring-background -ms-2 flex size-7 items-center justify-center rounded-full text-[11px] font-semibold ring-2 first:ms-0"
         >
-          {initials(m)}
+          <bdi>{initials(m)}</bdi>
         </span>
       ))}
       {extra > 0 && (

@@ -68,7 +68,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 sm:gap-6">
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 pb-24 sm:gap-6 md:pb-0">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-2xl font-semibold text-balance sm:text-3xl">
