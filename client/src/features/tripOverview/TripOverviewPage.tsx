@@ -9,6 +9,7 @@ import { useStays } from '@/features/stays'
 import { useTransport } from '@/features/transport'
 import { sectionIcon, sectionSegment, useSectionsQuery, type Section } from '@/features/places'
 import { BudgetBar, useBudgetQuery } from '@/features/budget'
+import { TripMapCard } from '@/features/tripMap'
 import { pickNextUp, type TripEvent } from './nextUp'
 
 // The trip's home: its details plus one card per section, each linking to that section.
@@ -100,6 +101,8 @@ export function TripOverviewPage() {
           </div>
         </Link>
       )}
+
+      <TripMapCard tripId={trip.id} stays={stays} sections={sections} transport={transport} />
 
       <nav aria-label={t('overview.sections')} className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <OverviewCard to={tripPath(trip.id, 'flights')} icon={PlaneTakeoff} title={t('flights.title')} count={flights?.length}>

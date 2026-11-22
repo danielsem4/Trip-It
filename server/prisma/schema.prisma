@@ -233,3 +233,14 @@ model TripCurrencyRate {
 
   @@unique([tripId, currency])
 }
+
+// ─── Map ─────────────────────────────────────────────────
+// Looked-up coordinates for a piece of text (an address, a station, a destination), shared by
+// all trips. `query` is trimmed, lowercased and single-spaced. No lat/lng: it wasn't found.
+model GeocodeCache {
+  query     String   @id
+  lat       Float?
+  lng       Float?
+  bbox      Float[] // [south, north, west, east], or empty
+  checkedAt DateTime @default(now())
+}

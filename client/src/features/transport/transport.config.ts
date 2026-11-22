@@ -1,4 +1,16 @@
-import { Building2, CalendarClock, Flag, Route, Ticket } from 'lucide-react'
+import {
+  Building2,
+  Bus,
+  CalendarClock,
+  Car,
+  CarTaxiFront,
+  Flag,
+  Route,
+  Ship,
+  Ticket,
+  TrainFront,
+  type LucideIcon,
+} from 'lucide-react'
 import type { TFunction } from 'i18next'
 import { formatDayTime, type CardContent, type FieldDef, type Price } from '@/features/tripItems'
 
@@ -17,6 +29,20 @@ export interface Transport extends Price {
   provider: string | null
   confirmation: string | null
   notes: string | null
+}
+
+const TRANSPORT_ICONS: Record<Transport['type'], LucideIcon> = {
+  TRAIN: TrainFront,
+  BUS: Bus,
+  CAR_RENTAL: Car,
+  TAXI: CarTaxiFront,
+  FERRY: Ship,
+  TRANSFER: Route,
+  OTHER: Route,
+}
+
+export function transportIcon(type: Transport['type']): LucideIcon {
+  return TRANSPORT_ICONS[type] ?? Route
 }
 
 export const transportFields: FieldDef[] = [

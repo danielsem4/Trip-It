@@ -13,6 +13,7 @@ import { createTransportRouter } from '../transport/transport.routes';
 import { createSectionsRouter } from '../sections/sections.routes';
 import { createExpensesRouter } from '../expenses/expenses.routes';
 import { createBudgetRouter } from '../budget/budget.routes';
+import { createMapRouter } from '../map/map.routes';
 
 const repository = new TripsRepository();
 const service = new TripsService(repository);
@@ -36,3 +37,4 @@ tripsRouter.use('/:id/transport', parseIdParam(), createTransportRouter(service)
 tripsRouter.use('/:id/sections', parseIdParam(), createSectionsRouter(service));
 tripsRouter.use('/:id/expenses', parseIdParam(), createExpensesRouter(service));
 tripsRouter.use('/:id/budget', parseIdParam(), createBudgetRouter(service));
+tripsRouter.use('/:id/map', parseIdParam(), createMapRouter(service));

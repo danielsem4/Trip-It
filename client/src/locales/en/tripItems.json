@@ -223,5 +223,20 @@
       "transport": "Transport",
       "place": "Plan"
     }
+  },
+  "map": {
+    "title": "Map",
+    "label": "Map of the trip's saved places",
+    "expand": "Open the map full screen",
+    "closeMap": "Close the map",
+    "closeCard": "Close the card",
+    "showInList": "Show in list",
+    "locating": "Locating places…",
+    "empty": "Add an address to a stay or a place to see it here.",
+    "otherPlaces": "Other places",
+    "route": "Route",
+    "locate": "Show where I am",
+    "youAreHere": "You are here",
+    "locationOff": "Your location isn't available. Allow location for this site to see where you are on the map."
   }
 }

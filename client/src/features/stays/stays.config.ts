@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarX, MapPin, Phone, Ticket } from 'lucide-react'
+import { BedDouble, CalendarCheck, CalendarX, Hotel, House, MapPin, Phone, Ticket, type LucideIcon } from 'lucide-react'
 import type { TFunction } from 'i18next'
 import {
   formatDayTime,
@@ -24,6 +24,12 @@ export interface Stay extends Price {
   website: string | null
   phone: string | null
   notes: string | null
+}
+
+const STAY_ICONS: Record<Stay['type'], LucideIcon> = { HOTEL: Hotel, APARTMENT: House, OTHER: BedDouble }
+
+export function stayIcon(type: Stay['type']): LucideIcon {
+  return STAY_ICONS[type] ?? BedDouble
 }
 
 export const stayFields: FieldDef[] = [
