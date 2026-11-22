@@ -1,46 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import app from './app';
 
-import express, { Request, Response } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
-import { authRouter } from './modules/auth/auth.routes';
-import { tripsRouter } from './modules/trips/trips.routes';
-import { invitesRouter } from './modules/invites/invites.routes';
-import { UPLOADS_ROOT } from './modules/trips/trips.upload';
-import { errorHandler } from './shared/middlewares/errorHandler';
-
-const app = express();
 const PORT = process.env.PORT || 4000;
-
-// Middleware
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
-app.use(cors({
-  origin: process.env['CLIENT_URL'] || 'http://localhost:5174',
-  credentials: true,
-}));
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Health check route
-app.get('/api/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-app.use('/api/uploads', express.static(UPLOADS_ROOT, { fallthrough: false }));
-
-// Module routes
-app.use('/api/auth', authRouter);
-app.use('/api/trips', tripsRouter);
-app.use('/api/invites', invitesRouter);
-
-// Error handler (must be last)
-app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-
-export default app;
