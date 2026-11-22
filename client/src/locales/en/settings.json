@@ -1,0 +1,12 @@
+{
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "roles": { "ADMIN": "Admin", "USER": "User" }
+  },
+  "appearance": "Appearance",
+  "themes": { "light": "Light", "dark": "Dark", "system": "System" },
+  "language": "Language"
+}

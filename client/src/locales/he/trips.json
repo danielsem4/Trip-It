@@ -1,0 +1,58 @@
+{
+  "validation": {
+    "titleRequired": "יש להזין כותרת",
+    "titleTooLong": "הכותרת יכולה להכיל עד 100 תווים",
+    "destinationRequired": "יש להזין יעד",
+    "destinationTooLong": "היעד יכול להכיל עד 100 תווים",
+    "dateInvalid": "יש להזין תאריך תקין",
+    "endBeforeStart": "תאריך הסיום לא יכול להיות לפני תאריך ההתחלה"
+  },
+  "card": {
+    "dayOf": "יום {{day}} מתוך {{total}}",
+    "today": "היום",
+    "moreMembers": "+{{count}}",
+    "members": "משתתפים",
+    "role": { "OWNER": "בעלים", "EDITOR": "עורך", "VIEWER": "צופה" }
+  },
+  "form": {
+    "createTitle": "טיול חדש",
+    "editTitle": "עריכת טיול",
+    "createDescription": "תכננו את ההרפתקה הבאה שלכם.",
+    "editDescription": "עדכנו את פרטי הטיול.",
+    "title": "כותרת",
+    "titlePlaceholder": "קיץ באיטליה",
+    "destination": "יעד",
+    "destinationPlaceholder": "רומא, איטליה",
+    "startDate": "תאריך התחלה",
+    "endDate": "תאריך סיום (אופציונלי)",
+    "cover": "תמונת נושא",
+    "coverColor": "צבע נושא",
+    "uploadImage": "העלאת תמונה",
+    "changeImage": "החלפת תמונה",
+    "removeImage": "הסרת תמונה",
+    "imageTypeError": "ניתן להעלות רק תמונות JPG, PNG או WebP",
+    "imageSizeError": "גודל התמונה חייב להיות עד 5MB",
+    "cancel": "ביטול",
+    "create": "יצירת טיול",
+    "save": "שמירת שינויים",
+    "saving": "שומר...",
+    "createFailed": "לא ניתן היה ליצור את הטיול. נסו שוב.",
+    "updateFailed": "לא ניתן היה לשמור את הטיול. נסו שוב.",
+    "coverFailed": "הטיול נשמר, אך העלאת התמונה נכשלה.",
+    "colors": {
+      "sky": "תכלת", "teal": "טורקיז", "emerald": "ירוק", "amber": "ענבר",
+      "orange": "כתום", "rose": "ורוד", "violet": "סגול", "slate": "אפור"
+    }
+  },
+  "details": {
+      "loading": "טוען טיול",
+      "loadFailed": "לא ניתן היה לטעון את הטיול.",
+      "retry": "נסו שוב",
+      "edit": "עריכה",
+      "delete": "מחיקה",
+      "deleted": "הטיול נמחק",
+      "deleteFailed": "לא ניתן היה למחוק את הטיול. נסו שוב.",
+      "deleteTitle": "למחוק את הטיול?",
+      "deleteDescription": "\"{{title}}\" יימחק לצמיתות עבור כל המשתתפים. לא ניתן לבטל פעולה זו."
+  }
+}

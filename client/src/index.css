@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 html, body, #root { height: 100%; margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* Palette: cool medical-white, medical blue primary, warm orange highlight (used sparingly). */
 :root {
@@ -116,8 +117,21 @@ html, body, #root { height: 100%; margin: 0; }
 
 body {
   margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fixed backdrop layer: `background-attachment: fixed` is ignored/janky on iOS. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   background: var(--glass-backdrop);
-  background-attachment: fixed;
+}
+
+/* Removes the double-tap zoom delay on touch devices. */
+a, button, [role="button"], input, select, textarea, label {
+  touch-action: manipulation;
 }
 
 /* Frosted-glass surfaces. Pair with text-*-foreground as usual. */
@@ -207,6 +221,93 @@ body {
   text-align: right;
 }
 
+
+/* Trip map pins. Leaflet places the 40x48 `.trip-map-pin` box with its bottom centre on the
+   coordinate; the badge fills the top 40px and the tip points at that bottom centre.
+   Layout lives on our own element: Leaflet's stylesheet resets the box itself. */
+.trip-map-pin-body,
+.trip-map-key {
+  --dot: var(--chart-1);
+  background: var(--dot);
+  border: 2.5px solid white;
+  border-radius: 9999px;
+}
+.trip-map-pin-body {
+  position: absolute;
+  inset: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  color: white;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.4);
+  transform-origin: 50% calc(100% + 8px);
+  transition: transform 0.15s;
+}
+.trip-map-pin-body svg {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+}
+/* The tip: a rotated square whose lower corner is the box's bottom centre. */
+.trip-map-pin-body::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 12px;
+  height: 12px;
+  background: var(--dot);
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  border-bottom-right-radius: 3px;
+  transform: translateX(-50%) rotate(45deg);
+}
+.trip-map-key {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+}
+.trip-map-pin-body[data-tone="attractions"], .trip-map-key[data-tone="attractions"] { --dot: var(--chart-5); }
+.trip-map-pin-body[data-tone="restaurants"], .trip-map-key[data-tone="restaurants"] { --dot: var(--chart-3); }
+.trip-map-pin-body[data-tone="custom"], .trip-map-key[data-tone="custom"] { --dot: var(--chart-2); }
+.trip-map-pin-body[data-tone="transport"], .trip-map-key[data-tone="transport"] { --dot: var(--chart-4); }
+.trip-map-pin-body[data-selected],
+.trip-map-pin:focus-visible .trip-map-pin-body {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--dot) 45%, transparent), 0 2px 6px rgb(0 0 0 / 0.4);
+}
+.trip-map-pin:focus-visible {
+  outline: none;
+}
+/* "You are here": Leaflet centres the 18px `.trip-map-me` box on the coordinate. */
+.trip-map-me {
+  box-sizing: border-box;
+  background: #2563eb;
+  border: 3px solid white;
+  border-radius: 9999px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+}
+.trip-map-me::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: #2563eb;
+  opacity: 0.35;
+  animation: trip-map-me-pulse 2s ease-out infinite;
+}
+@keyframes trip-map-me-pulse {
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.leaflet-container {
+  font: inherit;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

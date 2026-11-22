@@ -1,44 +1,79 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Languages, LogOut, Plane } from 'lucide-react'
+import { Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/features/auth'
+import { cn } from '@/lib/utils'
+import { AppSidebar, MobileSidebar } from './AppSidebar'
+import { useNavGroups } from './useNavGroups'
+
+// Matches Tailwind's `md` breakpoint: the drawer is only used below it.
+const tabletUp = window.matchMedia('(min-width: 48rem)')
 
 export function AppLayout() {
-  const { t, i18n } = useTranslation('common')
-  const navigate = useNavigate()
-  const { clearAuth } = useAuth()
+  const { t } = useTranslation('common')
+  const { pathname } = useLocation()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
 
-  async function handleLogout() {
-    await clearAuth()
-    navigate('/login')
-  }
+  const groups = useNavGroups()
 
-  function toggleLanguage() {
-    i18n.changeLanguage(i18n.resolvedLanguage === 'he' ? 'en' : 'he')
-  }
+  // The most specific item covering the current path names the page.
+  const current = groups
+    .flatMap((group) => group.items)
+    .filter(({ url, end }) => pathname === url || (!end && pathname.startsWith(`${url}/`)))
+    .sort((a, b) => b.url.length - a.url.length)[0]
+
+  // Close the drawer when the viewport grows past the phone layout (links close it on tap).
+  useEffect(() => {
+    const close = () => tabletUp.matches && setMobileOpen(false)
+    tabletUp.addEventListener('change', close)
+    return () => tabletUp.removeEventListener('change', close)
+  }, [])
+
+  const CollapseIcon = collapsed ? PanelLeftOpen : PanelLeftClose
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="flex items-center justify-between glass-strong sticky top-0 z-10 border-x-0 border-t-0 px-6 py-3">
-        <div className="flex items-center gap-2 font-display font-semibold text-primary">
-          <Plane className="h-5 w-5" />
-          {t('appName')}
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-2">
-            <Languages className="h-4 w-4" />
-            {t('language')}
+    <div className="min-h-dvh">
+      <AppSidebar groups={groups} collapsed={collapsed} />
+      <MobileSidebar groups={groups} open={mobileOpen} onOpenChange={setMobileOpen} />
+      <div
+        className={cn(
+          'flex min-h-dvh flex-col transition-[margin] duration-300 md:ms-16',
+          !collapsed && 'lg:ms-64',
+        )}
+      >
+        <header className="glass-strong sticky top-0 z-10 flex min-h-14 items-center gap-2 border-x-0 border-t-0 px-2 pt-[env(safe-area-inset-top)] sm:px-4">
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            className="md:hidden"
+            onClick={() => setMobileOpen(true)}
+            aria-label={t('nav.openMenu')}
+            aria-expanded={mobileOpen}
+          >
+            <Menu className="size-5" />
           </Button>
-          <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">
-            <LogOut className="h-4 w-4" />
-            {t('signOut')}
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            className="hidden lg:inline-flex"
+            onClick={() => setCollapsed((value) => !value)}
+            aria-label={t(collapsed ? 'nav.expandSidebar' : 'nav.collapseSidebar')}
+            aria-pressed={collapsed}
+          >
+            <CollapseIcon className="size-5 rtl:-scale-x-100" />
           </Button>
-        </div>
-      </header>
-      <main className="flex flex-1 flex-col p-6">
-        <Outlet />
-      </main>
+          {current && (
+            <h1 className="truncate text-base font-semibold sm:text-lg md:ps-2 lg:ps-0">
+              {current.titleKey ? t(current.titleKey) : <bdi>{current.title}</bdi>}
+            </h1>
+          )}
+        </header>
+        <main className="flex flex-1 flex-col p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-6 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

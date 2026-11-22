@@ -25,7 +25,7 @@ export function LoadingButton({
     >
       {loading ? (
         <>
-          <Spinner data-icon="inline-start" className="mr-2 h-4 w-4" />
+          <Spinner data-icon="inline-start" className="me-2 h-4 w-4" />
           <span>{loadingText ?? t("loading", "Please wait")}</span>
         </>
       ) : (

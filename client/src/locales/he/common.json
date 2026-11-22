@@ -1,7 +1,31 @@
 {
   "appName": "Trip It",
-  "language": "English",
-  "signOut": "התנתקות",
+  "nav": {
+    "home": "בית",
+    "settings": "הגדרות",
+    "logout": "התנתקות",
+    "hello": "שלום, {{name}}",
+    "openMenu": "פתיחת תפריט",
+    "menu": "ניווט ראשי",
+    "collapseSidebar": "כיווץ תפריט",
+    "expandSidebar": "הרחבת תפריט",
+    "trip": {
+      "overview": "סקירה",
+      "flights": "טיסות",
+      "stays": "לינה",
+      "budget": "תקציב",
+      "attractions": "אטרקציות",
+      "restaurants": "מסעדות",
+      "transport": "תחבורה",
+      "addSection": "הוספת חלק"
+    }
+  },
+  "logoutDialog": {
+    "title": "להתנתק?",
+    "description": "האם אתה בטוח שברצונך להתנתק מהחשבון?",
+    "cancel": "ביטול",
+    "confirm": "התנתקות"
+  },
   "errors": {
     "notFound": {
       "title": "הדף לא נמצא",
@@ -9,5 +33,6 @@
       "goHome": "לדף הבית"
     }
   },
+  "close": "סגירה",
   "loading": "רק רגע"
 }
