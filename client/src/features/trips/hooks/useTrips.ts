@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createTrip,
@@ -19,8 +20,12 @@ export function useTripsQuery() {
   return useQuery({ queryKey: tripKeys.all, queryFn: ({ signal }) => listTrips(signal) })
 }
 
-export function useTripQuery(id: number) {
+export function useTripQuery(id: number, enabled = true) {
   return useQuery({
+    enabled,
+    // A 404 is a definitive answer (missing or not a member) -- don't retry it.
+    retry: (count, error) =>
+      !(axios.isAxiosError(error) && error.response?.status === 404) && count < 3,
     queryKey: tripKeys.detail(id),
     queryFn: ({ signal }) => getTrip(id, signal),
   })
@@ -48,10 +53,15 @@ export function useUpdateTrip(id: number) {
 }
 
 export function useDeleteTrip() {
-  const invalidate = useInvalidateTrips()
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: number) => deleteTrip(id),
-    onSuccess: invalidate,
+    onSuccess: async (_data, id) => {
+      // Drop the detail query so it never refetches into a 404; refresh only the list.
+      await queryClient.cancelQueries({ queryKey: tripKeys.detail(id) })
+      queryClient.removeQueries({ queryKey: tripKeys.detail(id) })
+      await queryClient.invalidateQueries({ queryKey: tripKeys.all, exact: true })
+    },
   })
 }
 

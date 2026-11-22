@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Trip } from '../types/trip.types'
-import { daysUntil, formatTripDates, tripDayProgress, tripStatus } from '../lib/tripDates'
+import { formatTripDates } from '../lib/tripDates'
+import { useTripCountdown } from '../hooks/useTripCountdown'
 import { TripCover } from './TripCover'
 import { MemberAvatars } from './MemberAvatars'
 
@@ -14,20 +15,8 @@ interface TripCardProps {
 export function TripCard({ trip, today }: Readonly<TripCardProps>) {
   const { t, i18n } = useTranslation('trips')
   const locale = i18n.resolvedLanguage ?? i18n.language
-  const status = tripStatus(trip, today)
 
-  let countdown: string | null = null
-  if (status === 'upcoming') {
-    countdown = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(
-      daysUntil(trip.startDate, today),
-      'day',
-    )
-  } else if (status === 'now') {
-    const progress = tripDayProgress(trip, today)
-    countdown = progress
-      ? t('card.dayOf', { day: progress.day, total: progress.total })
-      : t('card.today')
-  }
+  const countdown = useTripCountdown(trip, today)
 
   return (
     <Link

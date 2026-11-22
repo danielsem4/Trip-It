@@ -22,3 +22,5 @@ export {
   useUploadTripCover,
   useRemoveTripCover,
 } from './hooks/useTrips'
+export { useTripCountdown } from './hooks/useTripCountdown'
+export { TripDetailsPage } from './pages/TripDetailsPage'

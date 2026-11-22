@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { LoginPage, RegisterPage } from '@/features/auth'
 import { HomePage } from '@/features/home'
+import { TripDetailsPage } from '@/features/trips'
 import { SettingsPage } from '@/features/settings'
 import { ProtectedRoute } from '@/components/shared/ProtectedRoute'
 import { GuestRoute } from '@/components/shared/GuestRoute'
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
         element: <AppLayout />,
         children: [
           { path: '/home', element: <HomePage /> },
+          { path: '/trips/:id', element: <TripDetailsPage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
