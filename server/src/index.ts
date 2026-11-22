@@ -6,6 +6,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { authRouter } from './modules/auth/auth.routes';
+import { tripsRouter } from './modules/trips/trips.routes';
 import { errorHandler } from './shared/middlewares/errorHandler';
 
 const app = express();
@@ -28,6 +29,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
 
 // Module routes
 app.use('/api/auth', authRouter);
+app.use('/api/trips', tripsRouter);
 
 // Error handler (must be last)
 app.use(errorHandler);
