@@ -5,6 +5,7 @@ import { parseIdParam } from '../../shared/middlewares/parseIdParam';
 import { createTripSchema, updateTripSchema } from './trips.schema';
 import { TripsRepository } from './trips.repository';
 import { TripsService } from './trips.service';
+import { handleCoverUpload } from './trips.upload';
 import { createTripsController } from './trips.controller';
 
 const repository = new TripsRepository();
@@ -19,3 +20,5 @@ tripsRouter.post('/', validateRequest(createTripSchema), controller.create);
 tripsRouter.get('/:id', parseIdParam(), controller.get);
 tripsRouter.patch('/:id', parseIdParam(), validateRequest(updateTripSchema), controller.update);
 tripsRouter.delete('/:id', parseIdParam(), controller.remove);
+tripsRouter.post('/:id/cover', parseIdParam(), handleCoverUpload, controller.setCover);
+tripsRouter.delete('/:id/cover', parseIdParam(), controller.removeCover);

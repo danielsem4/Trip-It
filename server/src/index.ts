@@ -7,13 +7,14 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { authRouter } from './modules/auth/auth.routes';
 import { tripsRouter } from './modules/trips/trips.routes';
+import { UPLOADS_ROOT } from './modules/trips/trips.upload';
 import { errorHandler } from './shared/middlewares/errorHandler';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Middleware
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'same-site' } }));
 app.use(cors({
   origin: process.env['CLIENT_URL'] || 'http://localhost:5174',
   credentials: true,
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+app.use('/api/uploads', express.static(UPLOADS_ROOT, { fallthrough: false }));
 
 // Module routes
 app.use('/api/auth', authRouter);

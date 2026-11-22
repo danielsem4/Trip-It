@@ -1,5 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { TripsService } from './trips.service';
+import fs from 'fs';
+import { AppError } from '../../shared/errors/AppError';
+import { deleteCoverFile } from './trips.upload';
 import type { CreateTripDto, UpdateTripDto } from './trips.schema';
 
 export function createTripsController(service: TripsService) {
@@ -46,8 +49,44 @@ export function createTripsController(service: TripsService) {
 
     async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-        await service.remove(req.currentUser!.userId, res.locals['id'] as number);
+        const { coverImageUrl } = await service.remove(req.currentUser!.userId, res.locals['id'] as number);
+        await deleteCoverFile(coverImageUrl).catch(() => undefined);
         res.status(204).end();
+      } catch (err) {
+        next(err);
+      }
+    },
+
+    async setCover(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        if (!req.file) throw new AppError('Cover image is required', 400);
+        const filePath = req.file.path;
+        try {
+          const { trip, previousUrl } = await service.setCoverImage(
+            req.currentUser!.userId,
+            res.locals['id'] as number,
+            `/api/uploads/covers/${req.file.filename}`,
+          );
+          await deleteCoverFile(previousUrl).catch(() => undefined);
+          res.json({ trip });
+        } catch (err) {
+          await fs.promises.unlink(filePath).catch(() => undefined);
+          throw err;
+        }
+      } catch (err) {
+        next(err);
+      }
+    },
+
+    async removeCover(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        const { trip, previousUrl } = await service.setCoverImage(
+          req.currentUser!.userId,
+          res.locals['id'] as number,
+          null,
+        );
+        await deleteCoverFile(previousUrl).catch(() => undefined);
+        res.json({ trip });
       } catch (err) {
         next(err);
       }
