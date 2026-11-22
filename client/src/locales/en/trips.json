@@ -36,7 +36,6 @@
     "create": "Create trip",
     "save": "Save changes",
     "saving": "Saving...",
-    "close": "Close",
     "createFailed": "Couldn't create the trip. Please try again.",
     "updateFailed": "Couldn't save the trip. Please try again.",
     "coverFailed": "The trip was saved, but the image couldn't be uploaded.",
