@@ -1,0 +1,13 @@
+{
+  "appName": "Trip It",
+  "language": "עברית",
+  "signOut": "Sign out",
+  "errors": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for doesn't exist.",
+      "goHome": "Go home"
+    }
+  },
+  "loading": "Please wait"
+}

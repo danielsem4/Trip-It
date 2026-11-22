@@ -1,0 +1,13 @@
+{
+  "appName": "Trip It",
+  "language": "English",
+  "signOut": "התנתקות",
+  "errors": {
+    "notFound": {
+      "title": "הדף לא נמצא",
+      "description": "הדף שחיפשת אינו קיים.",
+      "goHome": "לדף הבית"
+    }
+  },
+  "loading": "רק רגע"
+}
