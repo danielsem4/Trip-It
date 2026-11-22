@@ -16,8 +16,8 @@ const coverColor = z.enum(COVER_COLORS);
 
 export const createTripSchema = z
   .object({
-    title: z.string().trim().min(1).max(120),
-    destination: z.string().trim().min(1).max(120),
+    title: z.string().trim().min(1).max(100),
+    destination: z.string().trim().min(1).max(100),
     startDate: isoDate,
     endDate: isoDate.nullable().optional(),
     coverColor: coverColor.optional(),
@@ -28,8 +28,8 @@ export const createTripSchema = z
   });
 
 export const updateTripSchema = z.object({
-  title: z.string().trim().min(1).max(120).optional(),
-  destination: z.string().trim().min(1).max(120).optional(),
+  title: z.string().trim().min(1).max(100).optional(),
+  destination: z.string().trim().min(1).max(100).optional(),
   startDate: isoDate.optional(),
   endDate: isoDate.nullable().optional(),
   coverColor: coverColor.optional(),
